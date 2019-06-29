@@ -1,16 +1,18 @@
+from django.contrib.auth.models import User
 from django.db import models
 
-class User(models.Model):
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=11, default='')
 
     class Meta:
         abstract = True
 
-class Doctor(User):
+class Doctor(Profile):
     speciality = models.CharField(max_length=255)
 
-class Attendant(User):
+class Attendant(Profile):
     SHIFTS = [
         ('M', 'Manhã'),
         ('T', 'Tarde'),
@@ -18,7 +20,7 @@ class Attendant(User):
     ]
     shift = models.CharField(max_length=1, choices=SHIFTS, default='I')
 
-class Patient(User):
+class Patient(Profile):
     birthdate = models.DateField()
     GENDER = [
         ('H', 'Homem'),
