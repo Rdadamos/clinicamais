@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_REDIRECT_URL = 'appointments/'
 
 # Application definition
 
@@ -125,6 +126,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# Redirect after login
-LOGIN_REDIRECT_URL = 'appointments/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), )

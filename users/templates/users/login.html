@@ -1,10 +1,22 @@
+{% extends "appointments/base.html" %}
+
 {% block title %}Login{% endblock %}
 
 {% block content %}
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-  </form>
+  <div class="card text-center loginCard">
+    <div class="card-header">
+      <h1>Clínica Mais</h1>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Login</h5>
+      <form method="post" class="loginForm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+    <div class="card-footer text-muted">
+      &copy; {% now "Y" %} Clínica Mais
+    </div>
+  </div>
 {% endblock %}
