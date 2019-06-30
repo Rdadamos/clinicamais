@@ -1,9 +1,23 @@
 {% block sidebar %}
-<nav class="nav flex-column text-center mt-5">
-  <a class="nav-link" href="{% url 'update_attendant' %}">Atendentes</a>
-  <a class="nav-link" href="{% url 'new_attendant' %}">Médicos</a>
-  <a class="nav-link" href="{% url 'attendant' %}">Pacientes</a>
-  <a class="nav-link" href="{% url 'attendant' %}">Medicamentos</a>
-  <a class="nav-link" href="{% url 'attendant' %}">Exames</a>
-</nav>
+<table class="table table-hover table-borderless text-center">
+  <tbody>
+      <tr>
+        <td><a class="nav-link" href="{% url 'attendant' %}">Atendentes</a></td>
+      </tr>
+      <tr>
+        <td><a class="nav-link" href="{% url 'new_attendant' %}">Médicos</a></td>
+      </tr>
+      <tr>
+        <td><a class="nav-link" href="{% url 'attendant' %}">Pacientes</a></td>
+      </tr>
+      <tr>
+        <td><a class="nav-link" href="{% url 'attendant' %}">Medicamentos</a></td>
+      </tr>
+      <tr>
+        <td><a class="nav-link" href="{% url 'attendant' %}">Exames</a></td>
+      </tr>
+      <tr>
+      </tr>
+  </tbody>
+</table>
 {% endblock %}

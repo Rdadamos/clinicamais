@@ -13,7 +13,7 @@ html, body {
 
 .loginCard {
   min-height: 360px;
-  min-width: 420px;
+  max-width: 420px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -27,9 +27,31 @@ html, body {
   min-height: 100%;
 }
 
+.sidebarBox .table {
+  margin-top: 70px;
+}
+
+.sidebarBox .table td {
+  padding: 0;
+}
+
+.sidebarBox .table a {
+  color: #777777;
+}
+
+.sidebarBox .table a:hover {
+  text-decoration: none;
+}
+
 /* main */
+@media(min-width:768px) {
+  .mainBox {
+    width: 80% !important;
+  }
+}
+
 .mainBox {
-  width: 80%;
+  width: 100%;
 }
 
 .mainMsg {
@@ -46,4 +68,31 @@ html, body {
 
 .homeTitle .homeLink:hover {
   text-decoration: none;
+}
+
+/* forms */
+.myForm p label {
+  width: 100px;
+  text-align: right;
+  line-height: 1rem;
+}
+
+.myForm p input {
+  width: 50%;
+  margin-left: 10px;
+}
+
+.myForm p .helptext {
+  display: block;
+  margin: 5px 0 0 115px;
+  font-size: 0.9rem;
+}
+
+.myForm p select {
+  width: 25%;
+  margin-left: 10px;
+}
+
+.myForm .btn {
+  margin-left: 115px;
 }
