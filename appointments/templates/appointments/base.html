@@ -27,6 +27,7 @@
         </div>
     {% endif %}
     <div class="container pt-5">
+      {% include "appointments/alerts.html" %}
       {% block content %}{% endblock %}
     </div>
     {% if user.is_authenticated %}

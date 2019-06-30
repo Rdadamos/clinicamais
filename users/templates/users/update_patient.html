@@ -1,0 +1,12 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+  <h2>Editar Paciente</h2>
+  <form method="post" class="myForm">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ patient_form.as_p }}
+    <a href="{% url 'all_patient' %}" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-success ml-3">Salvar</button>
+  </form>
+{% endblock %}

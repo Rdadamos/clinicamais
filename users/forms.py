@@ -1,5 +1,8 @@
 from django import forms
-from .models import Attendant, User
+from django.forms.widgets import DateInput
+from django.contrib.admin.widgets import AdminDateWidget
+from .models import Attendant, Doctor, Patient, User
+
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -30,4 +33,39 @@ class AttendantForm(forms.ModelForm):
             'name': 'Nome completo',
             'phone': 'Digite somente os números',
             'shift': 'Informe o turno'
+        }
+
+class DoctorForm(forms.ModelForm):
+    class Meta:
+        model = Doctor
+        fields = ('name', 'phone', 'speciality')
+        labels = {
+            'name': 'Nome',
+            'phone': 'Telefone',
+            'speciality': 'Especialidade'
+        }
+        help_texts = {
+            'name': 'Nome completo',
+            'phone': 'Digite somente os números',
+            'speciality': 'Especialidade médica'
+        }
+
+class PatientForm(forms.ModelForm):
+    # birthdate = DateField(widget=AdminDateWidget)
+    class Meta:
+        model = Patient
+        fields = ('name', 'phone', 'birthdate', 'gender')
+        labels = {
+            'name': 'Nome',
+            'phone': 'Telefone',
+            'birthdate': 'Nascimento',
+            'gender': 'Sexo'
+        }
+        help_texts = {
+            'name': 'Nome completo',
+            'phone': 'Digite somente os números',
+            'birthdate': 'Data de nascimento'
+        }
+        widgets = {
+            'birthdate': DateInput(attrs={'type':'date'})
         }

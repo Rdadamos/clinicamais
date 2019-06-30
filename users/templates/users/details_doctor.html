@@ -1,0 +1,30 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+  <div>
+    <h3 class="d-inline-block float-left">Médico: {{ doctor.name }}</h3>
+  </div>
+  <table class="table table-responsive">
+    <tbody>
+        <tr>
+          <td class="text-muted">Usuário:</td>
+          <td>{{ doctor.user.username }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">E-mail:</td>
+          <td>{{ doctor.user.email }}</td>
+        </tr>
+          <td class="text-muted">Telefone:</td>
+          <td>{{ doctor.phone }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Especialidade:</td>
+          <td>{{ doctor.speciality }}</td>
+        </tr>
+    </tbody>
+  </table>
+  <a class="btn btn-primary ml-3" href="{% url 'all_doctor' %}">Voltar</a>
+  <a class="btn btn-secondary ml-4" href="{% url 'update_doctor' id=doctor.user.id %}">Editar</a>
+  <button type="button" class="btn btn-danger deleteBtn ml-5" data-url="{% url 'delete_doctor' id=doctor.id %}" data-toggle="modal" data-target="#deleteModal">Deletar</button>
+  {% include "users/modal_delete.html" %}
+{% endblock %}

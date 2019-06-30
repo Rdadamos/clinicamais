@@ -14,9 +14,9 @@ class Doctor(Profile):
 
 class Attendant(Profile):
     SHIFTS = [
+        ('I', 'Integral'),
         ('M', 'Manhã'),
         ('T', 'Tarde'),
-        ('I', 'Integral'),
     ]
     shift = models.CharField(max_length=1, choices=SHIFTS, default='I')
 

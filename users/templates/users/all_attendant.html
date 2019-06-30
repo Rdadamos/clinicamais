@@ -23,7 +23,7 @@
           <td>{{ attendant.name }}</td>
           <td>{{ attendant.user.email }}</td>
           <td>{{ attendant.phone }}</td>
-          <td>{{ attendant.shift }}</td>
+          <td class="shiftField">{{ attendant.shift }}</td>
           <td>
             <a class="btn btn-success btn-sm mr-2" href="{% url 'details_attendant' id=attendant.id %}">Ver</a>
             <a class="btn btn-warning btn-sm mr-2" href="{% url 'update_attendant' id=attendant.user.id %}">Editar</a>

@@ -1,8 +1,16 @@
 body {
   color: #777777;
 }
+
 html, body {
   height: 100%;
+}
+
+/* alert */
+.alert-error {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
 }
 
 /* login */
@@ -13,11 +21,19 @@ html, body {
 
 .loginCard {
   min-height: 360px;
-  max-width: 420px;
+  width: 420px;
   position: absolute;
   top: 50%;
   left: 50%;
   margin: -180px 0 0 -210px;
+}
+
+.loginForm .errorlist {
+  list-style-type: none;
+  color: #ffc107;
+  border: solid 1px #ffc107;
+  padding: 1rem;
+  text-align: justify;
 }
 
 /* sidebar */
@@ -95,4 +111,16 @@ html, body {
 
 .myForm .btn {
   margin-left: 115px;
+}
+
+.myForm input::-webkit-outer-spin-button,
+.myForm input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.myForm .errorlist {
+  list-style-type: none;
+  padding-left: 115px;
+  color: #dc3545;
 }
