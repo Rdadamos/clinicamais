@@ -1,0 +1,30 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+  <div>
+    <h3 class="d-inline-block float-left">Atendente: {{ attendant.name }}</h3>
+  </div>
+  <table class="table table-responsive">
+    <tbody>
+        <tr>
+          <td class="text-muted">Usuário:</td>
+          <td>{{ attendant.user.username }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">E-mail:</td>
+          <td>{{ attendant.user.email }}</td>
+        </tr>
+          <td class="text-muted">Telefone:</td>
+          <td>{{ attendant.phone }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Turno:</td>
+          <td>{{ attendant.shift }}</td>
+        </tr>
+    </tbody>
+  </table>
+  <a class="btn btn-secondary ml-3" href="{% url 'all_attendant' %}">Voltar</a>
+  <a class="btn btn-warning ml-3" href="{% url 'update_attendant' id=attendant.user.id %}">Editar</a>
+  <button type="button" class="btn btn-danger deleteBtn ml-3" data-url="{% url 'delete_attendant' id=attendant.id %}" data-toggle="modal" data-target="#deleteModal">Deletar</button>
+  {% include "users/modal_delete.html" %}
+{% endblock %}
