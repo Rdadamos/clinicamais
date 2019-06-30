@@ -1,0 +1,11 @@
+{% extends 'appointments/base.html' %}
+
+{% block content %}
+  <h2>Novo Atendente</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ attendant_form.as_p }}
+    <button type="submit" class="btn btn-primary">Save changes</button>
+  </form>
+{% endblock %}
