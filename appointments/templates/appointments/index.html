@@ -1,3 +1,9 @@
-{% for item in latest_question_list %}
-  {{ item.user.username }}
-{% endfor %}
+{% extends "appointments/base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  {% for item in latest_question_list %}
+    {{ item.user.username }}
+  {% endfor %}
+{% endblock %}
