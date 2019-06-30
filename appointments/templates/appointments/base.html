@@ -16,12 +16,19 @@
         {% include "appointments/sidebar.html" %}
       </div>
       <div class="mainBox float-left">
-        <p class="mainMsg text-right p-3">
-          Olá, {{ user.username }}
-          <a class="btn btn-danger ml-3" href="{% url 'logout' %}">Sair</a>
-        </p>
+        <div class="mainMsg text-right p-3">
+          <div class="container">
+            <h1 class="float-left text-left homeTitle">
+              <a class="homeLink" href="{% url 'home' %}" title="Home">Clínica Mais</a>
+            </h1>
+            <span>Olá, {{ user.username }}.</span>
+            <a class="btn btn-danger ml-4" href="{% url 'logout' %}">Sair</a>
+          </div>
+        </div>
     {% endif %}
-    {% block content %}{% endblock %}
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
     {% if user.is_authenticated %}
       </div>
     {% endif %}

@@ -1,4 +1,7 @@
-html, body, .height100 {
+body {
+  color: #777777;
+}
+html, body {
   height: 100%;
 }
 
@@ -20,7 +23,7 @@ html, body, .height100 {
 /* sidebar */
 .sidebarBox {
   width: 20%;
-  border-right: solid 1px #000000;
+  border-right: solid 1px #cccccc;
   min-height: 100%;
 }
 
@@ -30,5 +33,17 @@ html, body, .height100 {
 }
 
 .mainMsg {
-  border-bottom: solid 1px #000000;
+  border-bottom: solid 1px #cccccc;
+}
+
+.homeTitle {
+  line-height: 2.5rem;
+}
+
+.homeTitle .homeLink {
+  color: #777777;
+}
+
+.homeTitle .homeLink:hover {
+  text-decoration: none;
 }
