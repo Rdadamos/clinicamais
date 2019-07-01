@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from .decorators import anonimous_only
 
 urlpatterns = [
     url('atendente/novo/', views.new_attendant, name='new_attendant'),
@@ -23,5 +24,5 @@ urlpatterns = [
     url('paciente/', views.all_patient, name='all_patient'),
 
     url('logout/', auth_views.logout_then_login, {'login_url': '/'}, name='logout'),
-    url('', auth_views.LoginView.as_view(template_name="users/login.html"), name='login'),
+    path('', anonimous_only(auth_views.LoginView.as_view(template_name="users/login.html")), name='login'),
 ]

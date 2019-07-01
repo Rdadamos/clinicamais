@@ -23,4 +23,5 @@ $(document).ready(function() {
       gender.text("Outro");
     }
   });
+  $("#id_phone").mask('(00) 00000-0000');
 });

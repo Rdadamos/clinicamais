@@ -4,7 +4,7 @@ from django.db import models
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=11, default='')
+    phone = models.CharField(max_length=15, default='')
 
     class Meta:
         abstract = True
