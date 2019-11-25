@@ -24,4 +24,5 @@ $(document).ready(function() {
     }
   });
   $("#id_phone").mask('(00) 00000-0000');
+  $("#id_birthdate").mask('00/00/0000');
 });

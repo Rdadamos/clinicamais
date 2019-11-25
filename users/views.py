@@ -1,10 +1,11 @@
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from .models import Attendant, Doctor, Patient, User
-from .forms import AttendantForm, DoctorForm, PatientForm, UserForm
+from .forms import AttendantForm, DoctorForm, PatientForm, UserPatientForm, UserForm
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .decorators import attendant_only
+from datetime import datetime
 
 # Attendant
 @user_passes_test(lambda u: u.is_superuser, login_url='/home/')
@@ -113,12 +114,12 @@ def delete_doctor(request, id):
     return redirect('all_doctor')
 
 # Patient
-@login_required(login_url='/')
+@attendant_only
 def all_patient(request):
     patients = get_list_or_404(Patient)
     return render(request, 'users/all_patient.html', {'patients': patients})
 
-@login_required(login_url='/')
+@attendant_only
 def details_patient(request, id):
     patient = get_object_or_404(Patient, id=id)
     return render(request, 'users/details_patient.html', {'patient': patient})
@@ -126,7 +127,7 @@ def details_patient(request, id):
 @attendant_only
 def new_patient(request):
     if request.method == 'POST':
-        user_form = UserForm(request.POST)
+        user_form = UserPatientForm(request.POST)
         patient_form = PatientForm(request.POST)
         if user_form.is_valid() and patient_form.is_valid():
             saveUser(user_form, patient_form)
@@ -135,7 +136,7 @@ def new_patient(request):
         else:
             messages.error(request, 'Verifique os erros abaixo')
     else:
-        user_form = UserForm()
+        user_form = UserPatientForm(initial={'username': 'paciente' + datetime.now().strftime('%m%d%Y%H%M%S%f'), 'password': 'paciente'})
         patient_form = PatientForm()
     return render(request, 'users/new_patient.html', {'user_form': user_form, 'patient_form': patient_form })
 
@@ -143,7 +144,7 @@ def new_patient(request):
 def update_patient(request, id):
     patient = Patient.objects.get(user=id)
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=patient.user)
+        user_form = UserPatientForm(request.POST, instance=patient.user)
         patient_form = PatientForm(request.POST, instance=patient)
         if user_form.is_valid() and patient_form.is_valid():
             updateUser(user_form, patient_form)
@@ -152,7 +153,7 @@ def update_patient(request, id):
         else:
             messages.error(request, 'Verifique os erros abaixo')
     else:
-        user_form = UserForm(instance=patient.user)
+        user_form = UserPatientForm(instance=patient.user)
         patient_form = PatientForm(instance=patient)
     return render(request, 'users/update_patient.html', {'user_form': user_form, 'patient_form': patient_form })
 
@@ -166,6 +167,7 @@ def delete_patient(request, id):
     return redirect('all_patient')
 
 # User
+@login_required(login_url='/')
 def saveUser(user_form, profile_form):
     post_user = user_form.save(commit=False)
     profile_form = profile_form.save(commit=False)
@@ -175,6 +177,7 @@ def saveUser(user_form, profile_form):
     profile_form.user = user
     profile_form.save()
 
+@login_required(login_url='/')
 def updateUser(user_form, profile_form):
     post_user = user_form.save(commit=False)
     post_user.password = make_password(user_form.cleaned_data['password'])

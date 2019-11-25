@@ -11,14 +11,14 @@
       <div class="modal-body text-center">
         Está certo disso?
       </div>
-      <div class="modal-footer text-center">
+      <div class="modal-footer">
         <div class="mx-auto">
           <button type="button" class="btn btn-secondary mr-4" data-dismiss="modal">Cancelar</button>
           <form class="deleteForm d-inline-block" action="" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Deletar</button>
           </form>
-      </div>
+        </div>
       </div>
     </div>
   </div>
