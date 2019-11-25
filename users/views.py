@@ -167,7 +167,6 @@ def delete_patient(request, id):
     return redirect('all_patient')
 
 # User
-@login_required(login_url='/')
 def saveUser(user_form, profile_form):
     post_user = user_form.save(commit=False)
     profile_form = profile_form.save(commit=False)
@@ -177,7 +176,6 @@ def saveUser(user_form, profile_form):
     profile_form.user = user
     profile_form.save()
 
-@login_required(login_url='/')
 def updateUser(user_form, profile_form):
     post_user = user_form.save(commit=False)
     post_user.password = make_password(user_form.cleaned_data['password'])

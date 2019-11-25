@@ -1,9 +1,12 @@
 {% block sidebar %}
 <table class="table table-hover table-borderless text-center">
   <tbody>
+      {% if user.is_superuser %}
       <tr>
         <td><a class="nav-link" href="{% url 'all_attendant' %}">Atendentes</a></td>
       </tr>
+      {% endif %}
+      {% if user.attendant %}
       <tr>
         <td><a class="nav-link" href="{% url 'all_doctor' %}">Médicos</a></td>
       </tr>
@@ -16,8 +19,7 @@
       <tr>
         <td><a class="nav-link" href="{% url 'all_attendant' %}">Exames</a></td>
       </tr>
-      <tr>
-      </tr>
+      {% endif %}
   </tbody>
 </table>
 {% endblock %}

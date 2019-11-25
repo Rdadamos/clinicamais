@@ -1,6 +1,5 @@
 from django import forms
 from django.forms.widgets import DateInput
-from django.contrib.admin.widgets import AdminDateWidget
 from .models import Attendant, Doctor, Patient, User
 
 

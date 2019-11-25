@@ -1,0 +1,15 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clínica Mais - Agenda Médica{% endblock %}
+
+{% block content %}
+  <h3>Agenda</h3>
+  <h6>{{ doctor.name }}</h6>
+  <form method="post" class="myForm">
+    {% csrf_token %}
+    {% for i in doctor_schedule_form %}
+    {{ i.as_p }}
+    {% endfor %}
+    <button type="submit" class="btn btn-success">Salvar</button>
+  </form>
+{% endblock %}
