@@ -26,3 +26,6 @@ class DoctorSchedule(models.Model):
     hour = models.TimeField()
     available = models.BooleanField()
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('doctor', 'day', 'hour',)

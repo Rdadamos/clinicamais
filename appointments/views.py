@@ -1,6 +1,7 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import Attendant, Doctor
 from .forms import DoctorScheduleForm
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import datetime as datetime
 
@@ -12,15 +13,34 @@ def index(request):
 
 @login_required(login_url='/')
 def doctor_schedule(request, id):
-    doctor = get_object_or_404(Doctor, id=id)
     schedule_forms = {}
-    for hour in range(8, 18):
-        schedule_forms[str(datetime.time(hour).strftime("%H:%M"))] = []
-        for day in range(1, 7):
-            schedule_forms[str(datetime.time(hour).strftime("%H:%M"))].append(
-            DoctorScheduleForm(auto_id=False, initial={
-                'day': day,
-                'hour': datetime.time(hour),
-                'doctor': doctor.id
-            }))
+    doctor = get_object_or_404(Doctor, id=id)
+    if request.method == 'POST':
+        for hour in range(8, 18):
+            position = str(datetime.time(hour).strftime("%H:%M"))
+            schedule_forms[position] = []
+            for day in range(1, 7):
+                schedule_forms[position].append(DoctorScheduleForm(request.POST, auto_id=False, prefix=str(hour)+"-"+str(day)))
+        for hour in range(8, 18):
+            position = str(datetime.time(hour).strftime("%H:%M"))
+            for day in range(1, 7):
+                if schedule_forms[position][day-1].is_valid():
+                    schedule_forms[position][day-1].save()
+                else:
+                    messages.error(request, 'Verifique os erros abaixo')
+                    return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
+        messages.success(request, 'Agenda de ' + doctor.name + ' salva com sucesso')
+        return redirect('home')
+    else:
+        for hour in range(8, 18):
+            position = str(datetime.time(hour).strftime("%H:%M"))
+            schedule_forms[position] = []
+            for day in range(1, 7):
+                schedule_forms[position].append(
+                DoctorScheduleForm(auto_id=False, prefix=str(hour)+"-"+str(day),
+                    initial={
+                        'day': day,
+                        'hour': datetime.time(hour),
+                        'doctor': doctor.id
+                }))
     return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
