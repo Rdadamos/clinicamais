@@ -8,3 +8,8 @@ class DoctorScheduleForm(forms.ModelForm):
         labels = {
             'available': ''
         }
+        widgets = {
+            'hour': forms.HiddenInput(),
+            'day': forms.HiddenInput(),
+            'doctor': forms.HiddenInput()
+        }

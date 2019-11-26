@@ -7,9 +7,89 @@
   <h6>{{ doctor.name }}</h6>
   <form method="post" class="myForm">
     {% csrf_token %}
-    {% for i in doctor_schedule_form %}
-    {{ i.as_p }}
-    {% endfor %}
+    <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Segunda</th>
+          <th scope="col">Terça</th>
+          <th scope="col">Quarta</th>
+          <th scope="col">Quinta</th>
+          <th scope="col">Sexta</th>
+          <th scope="col">Sábado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f, forms in schedule_forms.items %}
+        <tr>
+            <th scope="row">{{ f }}</th>
+            {% for form in forms %}
+            <td>{{ form.as_p }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+          <!-- <tr>
+            <th scope="row">08:00</th>
+            {% for form in schedule_forms %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr> -->
+          <!-- <tr>
+            <th scope="row">09:00</th>
+            {% for form in schedule_forms_9 %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">10:00</th>
+            {% for form in schedule_forms_10 %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">11:00</th>
+            {% for form in schedule_forms_11 %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">12:00</th>
+            {% for form in schedule_forms_12 %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">13:00</th>
+            {% for form in schedule_forms_13 %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">14:00</th>
+            {% for form in schedule_forms_14 %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">15:00</th>
+            {% for form in schedule_forms_15 %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">16:00</th>
+            {% for form in schedule_forms_16 %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">17:00</th>
+            {% for form in schedule_forms_17 %}
+              <td>{{ form.as_p }}</td>
+            {% endfor %}
+          </tr> -->
+      </tbody>
+    </table>
     <button type="submit" class="btn btn-success">Salvar</button>
   </form>
 {% endblock %}
