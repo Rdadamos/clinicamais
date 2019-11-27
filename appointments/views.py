@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import Attendant, Doctor
+from .models import Attendant, Doctor, DoctorSchedule
 from .forms import DoctorScheduleForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -14,13 +14,16 @@ def index(request):
 @login_required(login_url='/')
 def doctor_schedule(request, id):
     schedule_forms = {}
+    count = 0
+    schedule = DoctorSchedule.objects.filter(doctor=id).order_by('hour', 'day')
     doctor = get_object_or_404(Doctor, id=id)
     if request.method == 'POST':
         for hour in range(8, 18):
             position = str(datetime.time(hour).strftime("%H:%M"))
             schedule_forms[position] = []
             for day in range(1, 7):
-                schedule_forms[position].append(DoctorScheduleForm(request.POST, auto_id=False, prefix=str(hour)+"-"+str(day)))
+                schedule_forms[position].append(DoctorScheduleForm(request.POST, instance=schedule[count], auto_id=False, prefix=str(hour)+"-"+str(day)))
+                count += 1
         for hour in range(8, 18):
             position = str(datetime.time(hour).strftime("%H:%M"))
             for day in range(1, 7):
@@ -30,17 +33,18 @@ def doctor_schedule(request, id):
                     messages.error(request, 'Verifique os erros abaixo')
                     return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
         messages.success(request, 'Agenda de ' + doctor.name + ' salva com sucesso')
-        return redirect('home')
+        return redirect('all_doctor')
     else:
         for hour in range(8, 18):
             position = str(datetime.time(hour).strftime("%H:%M"))
             schedule_forms[position] = []
             for day in range(1, 7):
                 schedule_forms[position].append(
-                DoctorScheduleForm(auto_id=False, prefix=str(hour)+"-"+str(day),
+                DoctorScheduleForm(instance=schedule[count], auto_id=False, prefix=str(hour)+"-"+str(day),
                     initial={
                         'day': day,
                         'hour': datetime.time(hour),
                         'doctor': doctor.id
                 }))
+                count += 1
     return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })

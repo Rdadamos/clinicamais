@@ -1,11 +1,13 @@
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from .models import Attendant, Doctor, Patient, User
+from appointments.models import DoctorSchedule
 from .forms import AttendantForm, DoctorForm, PatientForm, UserPatientForm, UserForm
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .decorators import attendant_only
 from datetime import datetime
+import datetime as dt
 
 # Attendant
 @user_passes_test(lambda u: u.is_superuser, login_url='/home/')
@@ -77,7 +79,14 @@ def new_doctor(request):
         user_form = UserForm(request.POST)
         doctor_form = DoctorForm(request.POST)
         if user_form.is_valid() and doctor_form.is_valid():
-            saveUser(user_form, doctor_form)
+            doctor = saveUser(user_form, doctor_form)
+            # initial empty schedule
+            for hour in range(8, 18):
+                hourS = dt.time(hour)
+                for day in range(1, 7):
+                    schedule = DoctorSchedule(day=day, hour=hourS, doctor=doctor, available=False)
+                    schedule.save()
+            #
             messages.success(request, 'Novo Médico criado com sucesso')
             return redirect('home')
         else:
@@ -175,6 +184,7 @@ def saveUser(user_form, profile_form):
     user = User.objects.get(username=post_user.username)
     profile_form.user = user
     profile_form.save()
+    return profile_form
 
 def updateUser(user_form, profile_form):
     post_user = user_form.save(commit=False)
