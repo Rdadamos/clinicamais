@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 from .models import Appointment, Attendant, Doctor, DoctorSchedule
 from .forms import DoctorScheduleForm
 from django.contrib import messages
@@ -55,7 +55,11 @@ def appointments(request, id_patient):
 
 @login_required(login_url='/')
 def new_appointment_doctor(request, id_patient):
-    return render(request, 'appointments/new_appointment_doctor.html')
+    # try:
+        doctors = get_list_or_404(Doctor)
+        return render(request, 'appointments/new_appointment_doctor.html', { 'doctors': doctors, 'id_patient': id_patient })
+    # except:
+    #     return redirect('new_doctor')
 
 @login_required(login_url='/')
 def new_appointment(request, id_patient, id_doctor):

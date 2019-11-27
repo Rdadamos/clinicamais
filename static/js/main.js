@@ -30,4 +30,9 @@ $(document).ready(function() {
   });
   $("#id_phone").mask('(00) 00000-0000');
   $("#id_birthdate").mask('00/00/0000');
+
+  $("#btnSelectDoctor").click(function() {
+    var url = document.location.href + $("#selectDoctor").children("option:selected").val();
+    document.location = url;
+  });
 });
