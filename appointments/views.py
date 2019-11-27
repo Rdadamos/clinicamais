@@ -46,15 +46,17 @@ def doctor_schedule(request, id):
     return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
 
 @login_required(login_url='/')
-def appointments(request, id):
+def appointments(request, id_patient):
     try:
         appointments = get_list_or_404(Appointment)
-        print(appointments)
         return render(request, 'appointments/appointments.html', { 'appointments': appointments })
     except:
-        return redirect('new_appointment', id=id)
-
+        return redirect('new_appointment_doctor', id_patient=id_patient)
 
 @login_required(login_url='/')
-def new_appointment(request, id):
+def new_appointment_doctor(request, id_patient):
+    return render(request, 'appointments/new_appointment_doctor.html')
+
+@login_required(login_url='/')
+def new_appointment(request, id_patient, id_doctor):
     return render(request, 'appointments/new_appointment.html')
