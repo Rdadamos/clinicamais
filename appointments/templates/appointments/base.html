@@ -12,21 +12,23 @@
   </head>
   <body>
     {% if user.is_authenticated %}
-      <div class="sidebarBox float-left d-none d-sm-none d-md-block">
-        {% include "appointments/sidebar.html" %}
-      </div>
-      <div class="mainBox float-left">
-        <div class="mainMsg text-right p-3">
-          <div class="container">
-            <h1 class="float-left text-left homeTitle">
-              <a class="homeLink" href="{% url 'home' %}" title="Home">Clínica Mais</a>
-            </h1>
-            <span>Olá, {{ user.first_name }}{{ user.attendant.name }}{{ user.doctor.name }}{{ user.patient.name }}</span>
-            <a class="btn btn-dark ml-4" href="{% url 'logout' %}">Sair</a>
+      <div class="mainBox">
+        <div class="position-fixed bg-white">
+          <div class="mainMsg text-right p-3">
+            <div class="container">
+              <h1 class="float-left text-left homeTitle">
+                <a class="homeLink" href="{% url 'home' %}" title="Home">Clínica Mais</a>
+              </h1>
+              <span>Olá, {{ user.first_name }}{{ user.attendant.name }}{{ user.doctor.name }}{{ user.patient.name }}</span>
+              <a class="btn btn-dark ml-4" href="{% url 'logout' %}">Sair</a>
+            </div>
+          </div>
+          <div class="menubarBox">
+            {% include "appointments/menubar.html" %}
           </div>
         </div>
     {% endif %}
-    <div class="container pt-5">
+    <div class="container pt-3 pb-5">
       {% include "appointments/alerts.html" %}
       {% block content %}{% endblock %}
     </div>

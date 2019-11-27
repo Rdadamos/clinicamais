@@ -24,7 +24,7 @@
           <td class="genderField">{{ patient.gender }}</td>
           <td>
             <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_patient' id=patient.id %}">Ver</a>
-            <a class="btn btn-warning btn-sm mr-2 mb-2" href="{% url 'update_patient' id=patient.user.id %}">Editar</a>
+            <a class="btn btn-secondary btn-sm mr-2 mb-2" href="{% url 'update_patient' id=patient.user.id %}">Editar</a>
             <button type="button" class="btn btn-danger btn-sm deleteBtn mb-2" data-url="{% url 'delete_patient' id=patient.id %}" data-toggle="modal" data-target="#deleteModal">Deletar</button>
           </td>
         </tr>

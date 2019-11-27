@@ -17,28 +17,18 @@ def doctor_schedule(request, id):
     count = 0
     schedule = DoctorSchedule.objects.filter(doctor=id).order_by('hour', 'day')
     doctor = get_object_or_404(Doctor, id=id)
-    if request.method == 'POST':
-        for hour in range(8, 18):
-            position = str(datetime.time(hour).strftime("%H:%M"))
-            schedule_forms[position] = []
-            for day in range(1, 7):
+    formInvalid = False
+    for hour in range(8, 18):
+        position = str(datetime.time(hour).strftime("%H:%M"))
+        schedule_forms[position] = []
+        for day in range(1, 7):
+            if request.method == 'POST':
                 schedule_forms[position].append(DoctorScheduleForm(request.POST, instance=schedule[count], auto_id=False, prefix=str(hour)+"-"+str(day)))
-                count += 1
-        for hour in range(8, 18):
-            position = str(datetime.time(hour).strftime("%H:%M"))
-            for day in range(1, 7):
                 if schedule_forms[position][day-1].is_valid():
                     schedule_forms[position][day-1].save()
                 else:
-                    messages.error(request, 'Verifique os erros abaixo')
-                    return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
-        messages.success(request, 'Agenda de ' + doctor.name + ' salva com sucesso')
-        return redirect('all_doctor')
-    else:
-        for hour in range(8, 18):
-            position = str(datetime.time(hour).strftime("%H:%M"))
-            schedule_forms[position] = []
-            for day in range(1, 7):
+                    formInvalid = True
+            else:
                 schedule_forms[position].append(
                 DoctorScheduleForm(instance=schedule[count], auto_id=False, prefix=str(hour)+"-"+str(day),
                     initial={
@@ -46,5 +36,11 @@ def doctor_schedule(request, id):
                         'hour': datetime.time(hour),
                         'doctor': doctor.id
                 }))
-                count += 1
+            count += 1
+    if request.method == 'POST':
+        if formInvalid:
+            messages.error(request, 'Verifique os erros abaixo')
+            return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
+        messages.success(request, 'Agenda de ' + doctor.name + ' salva com sucesso')
+        return redirect('all_doctor')
     return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })

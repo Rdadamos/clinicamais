@@ -1,4 +1,9 @@
 $(document).ready(function() {
+  $('.mainBox').css("paddingTop", $('.mainBox > .position-fixed').height());
+  $( window ).resize(function() {
+    $('.mainBox').css("paddingTop", $('.mainBox > .position-fixed').height());
+  });
+
   $(".deleteBtn").bind("click", (function () {
     $(".deleteForm").attr('action', $(this).attr("data-url"));
   }));

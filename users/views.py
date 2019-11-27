@@ -28,13 +28,13 @@ def new_attendant(request):
         if user_form.is_valid() and attendant_form.is_valid():
             saveUser(user_form, attendant_form)
             messages.success(request, 'Novo Atendente criado com sucesso')
-            return redirect('home')
+            return redirect('all_attendant')
         else:
             messages.error(request, 'Verifique os erros abaixo')
     else:
         user_form = UserForm()
         attendant_form = AttendantForm()
-    return render(request, 'users/new_attendant.html', {'user_form': user_form, 'attendant_form': attendant_form })
+    return render(request, 'users/new.html', {'user_form': user_form, 'profile_form': attendant_form, 'userType': 'Atendente', 'url_all': 'all_attendant' })
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/home/')
 def update_attendant(request, id):
@@ -45,13 +45,13 @@ def update_attendant(request, id):
         if user_form.is_valid() and attendant_form.is_valid():
             updateUser(user_form, attendant_form)
             messages.success(request, 'Atendente atualizado com sucesso')
-            return redirect('home')
+            return redirect('all_attendant')
         else:
             messages.error(request, 'Verifique os erros abaixo')
     else:
         user_form = UserForm(instance=attendant.user)
         attendant_form = AttendantForm(instance=attendant)
-    return render(request, 'users/update_attendant.html', {'user_form': user_form, 'attendant_form': attendant_form })
+    return render(request, 'users/update.html', {'user_form': user_form, 'profile_form': attendant_form, 'userType': 'Atendente', 'url_all': 'all_attendant' })
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/home/')
 def delete_attendant(request, id):
@@ -88,13 +88,13 @@ def new_doctor(request):
                     schedule.save()
             #
             messages.success(request, 'Novo Médico criado com sucesso')
-            return redirect('home')
+            return redirect('all_doctor')
         else:
             messages.error(request, 'Verifique os erros abaixo')
     else:
         user_form = UserForm()
         doctor_form = DoctorForm()
-    return render(request, 'users/new_doctor.html', {'user_form': user_form, 'doctor_form': doctor_form })
+    return render(request, 'users/new.html', {'user_form': user_form, 'profile_form': doctor_form, 'userType': 'Médico', 'url_all': 'all_doctor' })
 
 @attendant_only
 def update_doctor(request, id):
@@ -105,13 +105,13 @@ def update_doctor(request, id):
         if user_form.is_valid() and doctor_form.is_valid():
             updateUser(user_form, doctor_form)
             messages.success(request, 'Médico atualizado com sucesso')
-            return redirect('home')
+            return redirect('all_doctor')
         else:
             messages.error(request, 'Verifique os erros abaixo')
     else:
         user_form = UserForm(instance=doctor.user)
         doctor_form = DoctorForm(instance=doctor)
-    return render(request, 'users/update_doctor.html', {'user_form': user_form, 'doctor_form': doctor_form })
+    return render(request, 'users/update.html', {'user_form': user_form, 'profile_form': doctor_form, 'userType': 'Médico', 'url_all': 'all_doctor' })
 
 @attendant_only
 def delete_doctor(request, id):
@@ -141,13 +141,13 @@ def new_patient(request):
         if user_form.is_valid() and patient_form.is_valid():
             saveUser(user_form, patient_form)
             messages.success(request, 'Novo Paciente criado com sucesso')
-            return redirect('home')
+            return redirect('all_patient')
         else:
             messages.error(request, 'Verifique os erros abaixo')
     else:
         user_form = UserPatientForm(initial={'username': 'paciente' + datetime.now().strftime('%m%d%Y%H%M%S%f'), 'password': 'paciente'})
         patient_form = PatientForm()
-    return render(request, 'users/new_patient.html', {'user_form': user_form, 'patient_form': patient_form })
+    return render(request, 'users/new.html', {'user_form': user_form, 'profile_form': patient_form, 'userType': 'Paciente', 'url_all': 'all_patient' })
 
 @attendant_only
 def update_patient(request, id):
@@ -158,13 +158,13 @@ def update_patient(request, id):
         if user_form.is_valid() and patient_form.is_valid():
             updateUser(user_form, patient_form)
             messages.success(request, 'Paciente atualizado com sucesso')
-            return redirect('home')
+            return redirect('all_patient')
         else:
             messages.error(request, 'Verifique os erros abaixo')
     else:
         user_form = UserPatientForm(instance=patient.user)
         patient_form = PatientForm(instance=patient)
-    return render(request, 'users/update_patient.html', {'user_form': user_form, 'patient_form': patient_form })
+    return render(request, 'users/update.html', {'user_form': user_form, 'profile_form': patient_form, 'userType': 'Paciente', 'url_all': 'all_patient' })
 
 @attendant_only
 def delete_patient(request, id):

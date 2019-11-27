@@ -36,38 +36,24 @@ html, body {
   text-align: justify;
 }
 
-/* sidebar */
-.sidebarBox {
-  width: 20%;
-  border-right: solid 1px #cccccc;
+/* menubar */
+.menubarBox {
+  border-bottom: solid 1px #cccccc;
   min-height: 100%;
 }
 
-.sidebarBox .table {
-  margin-top: 70px;
-}
-
-.sidebarBox .table td {
-  padding: 0;
-}
-
-.sidebarBox .table a {
-  color: #777777;
-}
-
-.sidebarBox .table a:hover {
-  text-decoration: none;
+.menubarBox .menuBtn {
+  padding: 0 2em;
+  height: 50px;
+  line-height: 50px;
+  margin: 0.2em 0.5em;
+  border: 1px solid #dae0e5;
 }
 
 /* main */
-@media(min-width:768px) {
-  .mainBox {
-    width: 80% !important;
-  }
-}
-
-.mainBox {
-  width: 100%;
+.mainBox .position-fixed {
+    width: 100%;
+    top: 0;
 }
 
 .mainMsg {
@@ -123,4 +109,18 @@ html, body {
   list-style-type: none;
   padding-left: 115px;
   color: #dc3545;
+}
+
+/* schedule */
+.tableSchedule td, .tableSchedule th {
+    padding: .30rem .75rem;
+}
+
+.tableSchedule p {
+  margin: 0;
+  text-align: center;
+}
+
+.tableSchedule p input {
+  margin-left: 0;
 }
