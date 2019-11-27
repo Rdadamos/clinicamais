@@ -12,8 +12,11 @@ import datetime as dt
 # Attendant
 @user_passes_test(lambda u: u.is_superuser, login_url='/home/')
 def all_attendant(request):
-    attendants = get_list_or_404(Attendant)
-    return render(request, 'users/all_attendant.html', {'attendants': attendants})
+    try:
+        attendants = get_list_or_404(Attendant)
+        return render(request, 'users/all_attendant.html', {'attendants': attendants})
+    except:
+        return redirect('new_attendant')
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/home/')
 def details_attendant(request, id):
@@ -65,8 +68,11 @@ def delete_attendant(request, id):
 # Doctor
 @attendant_only
 def all_doctor(request):
-    doctors = get_list_or_404(Doctor)
-    return render(request, 'users/all_doctor.html', {'doctors': doctors})
+    try:
+        doctors = get_list_or_404(Doctor)
+        return render(request, 'users/all_doctor.html', {'doctors': doctors})
+    except:
+        return redirect('new_doctor')
 
 @attendant_only
 def details_doctor(request, id):
@@ -125,8 +131,11 @@ def delete_doctor(request, id):
 # Patient
 @attendant_only
 def all_patient(request):
-    patients = get_list_or_404(Patient)
-    return render(request, 'users/all_patient.html', {'patients': patients})
+    try:
+        patients = get_list_or_404(Patient)
+        return render(request, 'users/all_patient.html', {'patients': patients})
+    except:
+        return redirect('new_patient')
 
 @attendant_only
 def details_patient(request, id):

@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import Attendant, Doctor, DoctorSchedule
+from .models import Appointment, Attendant, Doctor, DoctorSchedule
 from .forms import DoctorScheduleForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -44,3 +44,17 @@ def doctor_schedule(request, id):
         messages.success(request, 'Agenda de ' + doctor.name + ' salva com sucesso')
         return redirect('all_doctor')
     return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
+
+@login_required(login_url='/')
+def appointments(request, id):
+    try:
+        appointments = get_list_or_404(Appointment)
+        print(appointments)
+        return render(request, 'appointments/appointments.html', { 'appointments': appointments })
+    except:
+        return redirect('new_appointment', id=id)
+
+
+@login_required(login_url='/')
+def new_appointment(request, id):
+    return render(request, 'appointments/new_appointment.html')
