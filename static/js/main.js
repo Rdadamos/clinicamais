@@ -10,8 +10,14 @@ $(document).ready(function() {
   }));
   $(".btnNewAppointment").bind("click", (function () {
     $(this).addClass("d-none").next().removeClass("d-none");
-
   }));
+
+  $("#searchInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#tableSearch tr:not(:first)").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
 
   $(".shiftField").each(function() {
     shift = $(this);

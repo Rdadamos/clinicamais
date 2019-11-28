@@ -6,8 +6,12 @@
   <div>
     <h3 class="d-inline-block float-left">Consultas</h3>
     <a class="btn btn-primary btn-sm ml-3" href="{% url 'new_appointment_doctor' id_patient=id_patient %}">Agendar nova consulta</a>
+    <span class="float-right mr-5">
+      <label for="searchInput">Pesquisar: </label>
+      <input type="text" id="searchInput">
+    </span>
   </div>
-  <table class="table table-hover table-responsive">
+  <table class="table table-hover table-responsive" id="tableSearch">
     <thead>
       <tr>
         <th scope="col">Data</th>
@@ -19,12 +23,16 @@
     <tbody>
       {% for appointment in appointments %}
         <tr>
-          <th scope="row">{{ appointment.canceled }}</th>
+          <th scope="row">{{ appointment.date }}</th>
           <td>{{ appointment.doctor.name }}</td>
           <td>{{ appointment.patient.name }}</td>
-          <td>
-            <a class="btn btn-success btn-sm mr-2 mb-2" href="">Ver</a>
-            <button type="button" class="btn btn-danger btn-sm deleteBtn mb-2" data-url="{% url 'cancel_appointment' id=appointment.id %}" data-toggle="modal" data-target="#deleteModal">Cancelar consulta</button>
+          <td class="text-center">
+            {% if appointment.canceled %}
+              <button type="button" class="btn btn-outline-danger" disabled>Cancelada</button>
+            {% else %}
+              <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
+              <button type="button" class="btn btn-danger btn-sm deleteBtn mb-2" data-url="{% url 'cancel_appointment' id=appointment.id %}" data-toggle="modal" data-target="#deleteModal">Cancelar consulta</button>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}

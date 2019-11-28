@@ -6,8 +6,12 @@
   <div>
     <h3 class="d-inline-block float-left">Pacientes</h3>
     <a class="btn btn-primary btn-sm ml-3" href="{% url 'new_patient' %}">Novo</a>
+    <span class="float-right mr-5">
+      <label for="searchInput">Pesquisar: </label>
+      <input type="text" id="searchInput">
+    </span>
   </div>
-  <table class="table table-hover table-responsive">
+  <table class="table table-hover table-responsive" id="tableSearch">
     <thead>
       <tr>
         <th scope="col">Nome</th>

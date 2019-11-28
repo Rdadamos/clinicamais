@@ -1,0 +1,45 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clínica Mais - Consulta{% endblock %}
+
+{% block content %}
+  <div>
+    <h3>Consulta</h3>
+    <h6>Data: {{ appointment.date }}</h6>
+  </div>
+  <table class="table table-responsive">
+    <tbody>
+        <tr>
+          <td class="text-muted">Médico:</td>
+          <td>{{ appointment.doctor.name }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Especialidade:</td>
+          <td>{{ appointment.doctor.speciality }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Paciente:</td>
+          <td>{{ appointment.patient.name }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Data de nascimento:</td>
+          <td>{{ appointment.patient.birthdate }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Gênero:</td>
+          <td class="genderField">{{ appointment.patient.gender }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Gênero:</td>
+          <td class="genderField">{{ appointment.gender }}</td>
+        </tr>
+    </tbody>
+  </table>
+  <a class="btn btn-success ml-3 mr-4" href="{% url 'appointments' id_patient=appointment.patient.id %}">Voltar</a>
+  {% if appointment.canceled %}
+    <button type="button" class="btn btn-outline-danger" disabled>Cancelada</button>
+  {% else %}
+    <button type="button" class="btn btn-danger deleteBtn" data-url="{% url 'cancel_appointment' id=appointment.id %}" data-toggle="modal" data-target="#deleteModal">Cancelar consulta</button>
+  {% endif %}
+  {% include "users/modal_delete.html" %}
+{% endblock %}

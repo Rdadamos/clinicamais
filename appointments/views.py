@@ -79,7 +79,7 @@ def new_appointment(request, id_patient, id_doctor):
     else:
         start_date = datetime.date.today() + datetime.timedelta(days=1)
         end_date = start_date + datetime.timedelta(days=7)
-        appointments_period = Appointment.objects.filter(doctor=id_doctor, date__range=(start_date, end_date)).order_by('date')
+        appointments_period = Appointment.objects.filter(doctor=id_doctor, canceled=False, date__range=(start_date, end_date)).order_by('date')
         schedules = DoctorSchedule.objects.filter(doctor=id_doctor, available=True).order_by('hour', 'day')
         appointment_forms = {}
         for single_date in date_range(start_date, end_date):
@@ -109,6 +109,11 @@ def new_appointment(request, id_patient, id_doctor):
         return render(request, 'appointments/new_appointment.html', { 'appointment_forms': appointment_forms, 'daynames': daynames })
 
 @login_required(login_url='/')
+def details_appointment(request, id):
+    appointment = get_object_or_404(Appointment, id=id)
+    return render(request, 'appointments/details_appointment.html', {'appointment': appointment})
+
+@login_required(login_url='/')
 def cancel_appointment(request, id):
     if request.method == 'POST':
         appointment = Appointment.objects.get(id=id)
@@ -118,6 +123,8 @@ def cancel_appointment(request, id):
         prev = request.POST.get('prev', '/')
         return redirect(prev)
     return redirect('home')
+
+
 
 def date_range(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):
