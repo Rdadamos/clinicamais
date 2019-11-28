@@ -6,6 +6,10 @@ html, body {
   height: 100%;
 }
 
+.clearBoth {
+    clear: both;
+}
+
 /* alert */
 .alert-error {
   color: #856404;

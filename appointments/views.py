@@ -1,5 +1,5 @@
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
-from .models import Appointment, Attendant, Doctor, DoctorSchedule
+from .models import Appointment, Doctor, DoctorSchedule
 from .forms import AppointmentForm, DoctorScheduleForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,9 +9,12 @@ from django.utils.translation import gettext
 
 @login_required(login_url='/')
 def index(request):
-    latest_question_list = Attendant.objects.order_by('name')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'appointments/index.html', context)
+    try:
+        doctor = request.user.doctor.id
+        appointments = Appointment.objects.filter(doctor=doctor, date__gte=datetime.date.today()).order_by('date')
+    except:
+        appointments = Appointment.objects.filter(date__gte=datetime.date.today()).order_by('date')
+    return render(request, 'appointments/index.html', { 'appointments': appointments })
 
 @login_required(login_url='/')
 def doctor_schedule(request, id):
@@ -49,10 +52,19 @@ def doctor_schedule(request, id):
     return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
 
 @login_required(login_url='/')
-def appointments(request, id_patient):
+def all_appointments(request):
+    try:
+        doctor = request.user.doctor.id
+        appointments = Appointment.objects.filter(doctor=doctor).order_by('date')
+    except:
+        appointments = Appointment.objects.order_by('date')
+    return render(request, 'appointments/all_appointments.html', {'appointments': appointments})
+
+@login_required(login_url='/')
+def patient_appointments(request, id_patient):
     try:
         appointments = get_list_or_404(Appointment.objects.filter(patient=id_patient).order_by('date'))
-        return render(request, 'appointments/appointments.html', { 'appointments': appointments, 'id_patient': id_patient })
+        return render(request, 'appointments/patient_appointments.html', { 'appointments': appointments, 'id_patient': id_patient })
     except:
         messages.error(request, 'Nenhuma consulta cadastrada')
         return redirect('new_appointment_doctor', id_patient=id_patient)
@@ -115,7 +127,7 @@ def details_appointment(request, id):
         return render(request, 'appointments/details_appointment.html', {'appointment': appointment})
     except:
         messages.error(request, 'Consulta não encontrada')
-        return redirect('appointments')
+        return redirect('patient_appointments')
 
 @login_required(login_url='/')
 def cancel_appointment(request, id):
@@ -127,8 +139,6 @@ def cancel_appointment(request, id):
         prev = request.POST.get('prev', '/')
         return redirect(prev)
     return redirect('home')
-
-
 
 def date_range(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):

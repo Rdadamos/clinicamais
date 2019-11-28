@@ -1,10 +1,12 @@
-{% extends "appointments/base.html" %}
+{% extends 'appointments/base.html' %}
 
-{% block title %}Clínica Mais - Home{% endblock %}
+{% block title %}Clínica Mais - Todas as consultas{% endblock %}
+
+ {% load app_filters %}
 
 {% block content %}
   <div>
-    <h3>Próximas Consultas</h3>
+    <h3>Todas as consultas</h3>
     <label for="searchInput">Pesquisar: </label>
     <input type="text" id="searchInput" class="my-2">
   </div>
@@ -12,9 +14,7 @@
     <thead>
       <tr>
         <th scope="col">Data</th>
-        {% if not user.doctor %}
-          <th scope="col">Médico</th>
-        {% endif %}
+        <th scope="col">Médico</th>
         <th scope="col">Paciente</th>
         <th scope="col">Ações</th>
       </tr>
@@ -23,17 +23,18 @@
       {% for appointment in appointments %}
         <tr>
           <th scope="row">{{ appointment.date }}</th>
-          {% if not user.doctor %}
-            <td>{{ appointment.doctor.name }}</td>
-          {% endif %}
+          <td>{{ appointment.doctor.name }}</td>
           <td>{{ appointment.patient.name }}</td>
           <td class="text-center">
             {% if appointment.canceled %}
               <button type="button" class="btn btn-outline-danger" disabled>Cancelada</button>
             {% else %}
               <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
-              {% if user.doctor %}
+              {% if user.doctor and not appointment.date|is_past%}
                 <a class="btn btn-primary btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Atender</a>
+              {% endif %}
+              {% if not user.doctor and not appointment.date|is_past %}
+                <button type="button" class="btn btn-danger btn-sm deleteBtn mb-2" data-url="{% url 'cancel_appointment' id=appointment.id %}" data-toggle="modal" data-target="#deleteModal">Cancelar consulta</button>
               {% endif %}
             {% endif %}
           </td>
@@ -41,4 +42,5 @@
       {% endfor %}
     </tbody>
   </table>
+  {% include "users/modal_delete.html" %}
 {% endblock %}
