@@ -6,6 +6,11 @@ $(document).ready(function() {
 
   $(".deleteBtn").bind("click", (function () {
     $(".deleteForm").attr('action', $(this).attr("data-url"));
+    $("#deleteModal .modal-title").text($(this).text());
+  }));
+  $(".btnNewAppointment").bind("click", (function () {
+    $(this).addClass("d-none").next().removeClass("d-none");
+
   }));
 
   $(".shiftField").each(function() {

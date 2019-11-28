@@ -1,1 +1,34 @@
-Consultas
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clínica Mais - Consultas{% endblock %}
+
+{% block content %}
+  <div>
+    <h3 class="d-inline-block float-left">Consultas</h3>
+    <a class="btn btn-primary btn-sm ml-3" href="{% url 'new_appointment_doctor' id_patient=id_patient %}">Agendar nova consulta</a>
+  </div>
+  <table class="table table-hover table-responsive">
+    <thead>
+      <tr>
+        <th scope="col">Data</th>
+        <th scope="col">Médico</th>
+        <th scope="col">Paciente</th>
+        <th scope="col">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for appointment in appointments %}
+        <tr>
+          <th scope="row">{{ appointment.canceled }}</th>
+          <td>{{ appointment.doctor.name }}</td>
+          <td>{{ appointment.patient.name }}</td>
+          <td>
+            <a class="btn btn-success btn-sm mr-2 mb-2" href="">Ver</a>
+            <button type="button" class="btn btn-danger btn-sm deleteBtn mb-2" data-url="{% url 'cancel_appointment' id=appointment.id %}" data-toggle="modal" data-target="#deleteModal">Cancelar consulta</button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% include "users/modal_delete.html" %}
+{% endblock %}

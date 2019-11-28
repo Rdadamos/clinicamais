@@ -45,13 +45,15 @@ def doctor_schedule(request, id):
             return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
         messages.success(request, 'Agenda de ' + doctor.name + ' salva com sucesso')
         return redirect('all_doctor')
+    messages.info(request, 'Campos selecionados indicam que o médico atende nesse horário')
     return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
 
 @login_required(login_url='/')
 def appointments(request, id_patient):
     try:
-        appointments = get_list_or_404(Appointment)
-        return render(request, 'appointments/appointments.html', { 'appointments': appointments })
+        # appointments = get_list_or_404(Appointment)
+        appointments = Appointment.objects.filter(patient=id_patient).order_by('date')
+        return render(request, 'appointments/appointments.html', { 'appointments': appointments, 'id_patient': id_patient })
     except:
         return redirect('new_appointment_doctor', id_patient=id_patient)
 
@@ -91,16 +93,31 @@ def new_appointment(request, id_patient, id_doctor):
                 weekday = single_date.weekday()
                 available = available_hour.filter(day=weekday)
                 appointment = appointments_hour.filter(date__week_day=weekday+2)
-                if available and not appointment:
-                    appointment_forms[position].append(AppointmentForm(initial={
-                        'date': str(single_date) + ' ' + position,
-                        'doctor': id_doctor,
-                        'patient': id_patient,
-                        'attendant': request.user.attendant
-                    }))
+                if available:
+                    if not appointment:
+                        appointment_forms[position].append(AppointmentForm(initial={
+                            'date': str(single_date) + ' ' + position,
+                            'doctor': id_doctor,
+                            'patient': id_patient,
+                            'attendant': request.user.attendant
+                        }))
+                    else:
+                        appointment_forms[position].append('appointment')
                 else:
-                    appointment_forms[position].append('noform')
+                    appointment_forms[position].append('notavailable')
+        messages.info(request, 'Clique duas vezes para agendar a consulta')
         return render(request, 'appointments/new_appointment.html', { 'appointment_forms': appointment_forms, 'daynames': daynames })
+
+@login_required(login_url='/')
+def cancel_appointment(request, id):
+    if request.method == 'POST':
+        appointment = Appointment.objects.get(id=id)
+        appointment.canceled = True
+        appointment.save()
+        messages.success(request, 'Consulta cancelada com sucesso')
+        prev = request.POST.get('prev', '/')
+        return redirect(prev)
+    return redirect('home')
 
 def date_range(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):

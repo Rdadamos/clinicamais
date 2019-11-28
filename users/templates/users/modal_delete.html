@@ -3,20 +3,21 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Deletar</h5>
+        <h5 class="modal-title" id="deleteModalLabel"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body text-center">
-        Está certo disso?
+        Prosseguir?
       </div>
       <div class="modal-footer">
         <div class="mx-auto">
-          <button type="button" class="btn btn-secondary mr-4" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-secondary mr-4" data-dismiss="modal">Voltar</button>
           <form class="deleteForm d-inline-block" action="" method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Deletar</button>
+            <input type="hidden" name="prev" value="{{ request.path }}">
+            <button type="submit" class="btn btn-danger">Sim</button>
           </form>
         </div>
       </div>
