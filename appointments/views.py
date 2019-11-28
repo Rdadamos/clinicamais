@@ -51,10 +51,10 @@ def doctor_schedule(request, id):
 @login_required(login_url='/')
 def appointments(request, id_patient):
     try:
-        # appointments = get_list_or_404(Appointment)
-        appointments = Appointment.objects.filter(patient=id_patient).order_by('date')
+        appointments = get_list_or_404(Appointment.objects.filter(patient=id_patient).order_by('date'))
         return render(request, 'appointments/appointments.html', { 'appointments': appointments, 'id_patient': id_patient })
     except:
+        messages.error(request, 'Nenhuma consulta cadastrada')
         return redirect('new_appointment_doctor', id_patient=id_patient)
 
 @login_required(login_url='/')
@@ -110,8 +110,12 @@ def new_appointment(request, id_patient, id_doctor):
 
 @login_required(login_url='/')
 def details_appointment(request, id):
-    appointment = get_object_or_404(Appointment, id=id)
-    return render(request, 'appointments/details_appointment.html', {'appointment': appointment})
+    try:
+        appointment = get_object_or_404(Appointment, id=id)
+        return render(request, 'appointments/details_appointment.html', {'appointment': appointment})
+    except:
+        messages.error(request, 'Consulta não encontrada')
+        return redirect('appointments')
 
 @login_required(login_url='/')
 def cancel_appointment(request, id):

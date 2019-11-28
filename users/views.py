@@ -16,12 +16,17 @@ def all_attendant(request):
         attendants = get_list_or_404(Attendant)
         return render(request, 'users/all_attendant.html', {'attendants': attendants})
     except:
+        messages.error(request, 'Nenhum atendente cadastrado')
         return redirect('new_attendant')
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/home/')
 def details_attendant(request, id):
-    attendant = get_object_or_404(Attendant, id=id)
-    return render(request, 'users/details_attendant.html', {'attendant': attendant})
+    try:
+        attendant = get_object_or_404(Attendant, id=id)
+        return render(request, 'users/details_attendant.html', {'attendant': attendant})
+    except:
+        messages.error(request, 'Atendente não encontrado')
+        return redirect('all_attendant')
 
 @user_passes_test(lambda u: u.is_superuser, login_url='/home/')
 def new_attendant(request):
@@ -72,12 +77,17 @@ def all_doctor(request):
         doctors = get_list_or_404(Doctor)
         return render(request, 'users/all_doctor.html', {'doctors': doctors})
     except:
+        messages.error(request, 'Nenhum médico cadastrado')
         return redirect('new_doctor')
 
 @attendant_only
 def details_doctor(request, id):
-    doctor = get_object_or_404(Doctor, id=id)
-    return render(request, 'users/details_doctor.html', {'doctor': doctor})
+    try:
+        doctor = get_object_or_404(Doctor, id=id)
+        return render(request, 'users/details_doctor.html', {'doctor': doctor})
+    except:
+        messages.error(request, 'Médico não encontrado')
+        return redirect('all_doctor')
 
 @attendant_only
 def new_doctor(request):
@@ -135,12 +145,17 @@ def all_patient(request):
         patients = get_list_or_404(Patient)
         return render(request, 'users/all_patient.html', {'patients': patients})
     except:
+        messages.error(request, 'Nenhum paciente cadastrado')
         return redirect('new_patient')
 
 @attendant_only
 def details_patient(request, id):
-    patient = get_object_or_404(Patient, id=id)
-    return render(request, 'users/details_patient.html', {'patient': patient})
+    try:
+        patient = get_object_or_404(Patient, id=id)
+        return render(request, 'users/details_patient.html', {'patient': patient})
+    except:
+        messages.error(request, 'Paciente não encontrado')
+        return redirect('all_patient')
 
 @attendant_only
 def new_patient(request):

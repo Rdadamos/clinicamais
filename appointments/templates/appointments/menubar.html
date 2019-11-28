@@ -6,8 +6,7 @@
   {% if user.attendant %}
     <a class="menuBtn btn btn-outline-info" href="{% url 'all_doctor' %}">Médicos</a>
     <a class="menuBtn btn btn-outline-info" href="{% url 'all_patient' %}">Pacientes</a>
-    <a class="menuBtn btn btn-outline-info" href="{% url 'all_attendant' %}">Medicamentos</a>
-    <a class="menuBtn btn btn-outline-info" href="{% url 'all_attendant' %}">Exames</a>
+    <a class="menuBtn btn btn-outline-info" href="{% url 'all_medicine' %}">Medicamentos</a>
   {% endif %}
 </div>
 {% endblock %}

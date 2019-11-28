@@ -1,0 +1,38 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clínica Mais - Medicamentos{% endblock %}
+
+{% block content %}
+  <div>
+    <h3 class="d-inline-block float-left">Medicamentos</h3>
+    <a class="btn btn-primary btn-sm ml-3" href="{% url 'new_medicine' %}">Novo</a>
+    <span class="float-right mr-5">
+      <label for="searchInput">Pesquisar: </label>
+      <input type="text" id="searchInput">
+    </span>
+  </div>
+  <table class="table table-hover table-responsive" id="tableSearch">
+    <thead>
+      <tr>
+        <th scope="col">Nome genérico</th>
+        <th scope="col">Nome de fábrica</th>
+        <th scope="col">Fabricante</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for medicine in medicines %}
+        <tr>
+          <th scope="row">{{ medicine.generic_name }}</th>
+          <td>{{ medicine.factory_name }}</td>
+          <td>{{ medicine.manufacturer }}</td>
+          <td>
+            <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_medicine' id=medicine.id %}">Ver</a>
+            <a class="btn btn-secondary btn-sm mr-2 mb-2" href="{% url 'update_medicine' id=medicine.id %}">Editar</a>
+            <button type="button" class="btn btn-danger btn-sm deleteBtn mb-2" data-url="{% url 'delete_medicine' id=medicine.id %}" data-toggle="modal" data-target="#deleteModal">Deletar</button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% include "users/modal_delete.html" %}
+{% endblock %}

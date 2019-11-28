@@ -1,0 +1,29 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clínica Mais - Medicamento{% endblock %}
+
+{% block content %}
+  <div>
+    <h3 class="d-inline-block">Medicamento</h3>
+  </div>
+  <table class="table table-responsive">
+    <tbody>
+        <tr>
+          <td class="text-muted">Nome genérico:</td>
+          <td>{{ medicine.generic_name }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Nome de fábrica:</td>
+          <td>{{ medicine.factory_name }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Fabricante:</td>
+          <td>{{ medicine.manufacturer }}</td>
+        </tr>
+    </tbody>
+  </table>
+  <a class="btn btn-success ml-3" href="{% url 'all_medicine' %}">Voltar</a>
+  <a class="btn btn-secondary ml-4" href="{% url 'update_medicine' id=medicine.id %}">Editar</a>
+  <button type="button" class="btn btn-danger deleteBtn ml-5" data-url="{% url 'delete_medicine' id=medicine.id %}" data-toggle="modal" data-target="#deleteModal">Deletar</button>
+  {% include "users/modal_delete.html" %}
+{% endblock %}

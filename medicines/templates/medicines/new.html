@@ -1,0 +1,13 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clínica Mais - Novo Medicamento {% endblock %}
+
+{% block content %}
+  <h3>Novo Medicamento</h3>
+  <form method="post" class="myForm">
+    {% csrf_token %}
+    {{ medicine_form.as_p }}
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a class="btn btn-secondary ml-4" href="{% url 'all_medicine' %}">Cancelar</a>
+  </form>
+{% endblock %}
