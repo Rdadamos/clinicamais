@@ -89,7 +89,7 @@ def new_doctor(request):
             # initial empty schedule
             for hour in range(8, 18):
                 hourS = dt.time(hour)
-                for day in range(1, 7):
+                for day in range(0, 6):
                     schedule = DoctorSchedule(day=day, hour=hourS, doctor=doctor, available=False)
                     schedule.save()
             #

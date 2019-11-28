@@ -35,4 +35,9 @@ $(document).ready(function() {
     var url = document.location.href + $("#selectDoctor").children("option:selected").val();
     document.location = url;
   });
+
+  sunday_index = $(".tableAppointment th:contains('Domingo')").index();
+  $(".tableAppointment tr").each(function() {
+    $(this).children().eq(sunday_index).remove();
+  });
 });

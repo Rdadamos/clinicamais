@@ -1,5 +1,16 @@
 from django import forms
-from .models import DoctorSchedule
+from .models import Appointment, DoctorSchedule
+
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ('date', 'doctor', 'attendant', 'patient')
+        widgets = {
+            'date': forms.HiddenInput(),
+            'doctor': forms.HiddenInput(),
+            'attendant': forms.HiddenInput(),
+            'patient': forms.HiddenInput(),
+        }
 
 class DoctorScheduleForm(forms.ModelForm):
     class Meta:

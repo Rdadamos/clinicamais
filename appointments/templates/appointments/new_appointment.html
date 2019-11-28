@@ -1,1 +1,38 @@
-Nova consulta
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clínica Mais - Nova consulta{% endblock %}
+
+{% block content %}
+  <div>
+    <h3>Nova consulta</h3>
+  </div>
+  <table class="table table-hover table-responsive tableAppointment text-center">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        {% for day in daynames %}
+          <th scope="col">{{ day}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for hour, forms in appointment_forms.items %}
+        <tr>
+          <th scope="row">{{ hour }}</th>
+          {% for form in forms %}
+            <td>
+              {% if form == "noform" %}
+                Indisponível
+              {% else %}
+              <form method="post">{% csrf_token %}
+                {{ form }}
+                <button type="submit" class="btn btn-primary btn-sm">Marcar</button>
+              </form>
+            </td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
