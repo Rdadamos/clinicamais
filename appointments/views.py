@@ -65,41 +65,43 @@ def new_appointment_doctor(request, id_patient):
 
 @login_required(login_url='/')
 def new_appointment(request, id_patient, id_doctor):
+    daynames = []
     if request.method == 'POST':
         appointment_form = AppointmentForm(request.POST)
         if appointment_form.is_valid():
-            print(appointment_form.cleaned_data['date'])
-            messages.success(request, 'Novo Consulta criada com sucesso')
-            return redirect('all_patient')
+            appointment_form.save()
+            messages.success(request, 'Consulta marcada com sucesso')
         else:
-            messages.error(request, 'Verifique os erros abaixo')
+            messages.error(request, 'Não foi possível marcar a consulta')
+        return redirect('all_patient')
     else:
-        appointments = Appointment.objects.filter(doctor=id_doctor).order_by('date')
-        schedules = DoctorSchedule.objects.filter(doctor=id_doctor, available=True).order_by('hour', 'day')
-        appointment_forms = {}
         start_date = datetime.date.today() + datetime.timedelta(days=1)
         end_date = start_date + datetime.timedelta(days=7)
-        daynames = []
-        for single_date in daterange(start_date, end_date):
+        appointments_period = Appointment.objects.filter(doctor=id_doctor, date__range=(start_date, end_date)).order_by('date')
+        schedules = DoctorSchedule.objects.filter(doctor=id_doctor, available=True).order_by('hour', 'day')
+        appointment_forms = {}
+        for single_date in date_range(start_date, end_date):
             daynames.append(gettext(single_date.strftime("%A")) + single_date.strftime(", %d/%m"))
         for hour in range(8, 18):
             position = str(datetime.time(hour).strftime("%H:%M"))
             appointment_forms[position] = []
             available_hour = schedules.filter(hour=datetime.time(hour))
-            for single_date in daterange(start_date, end_date):
+            appointments_hour = appointments_period.filter(date__hour=hour);
+            for single_date in date_range(start_date, end_date):
                 weekday = single_date.weekday()
                 available = available_hour.filter(day=weekday)
-                if available:
+                appointment = appointments_hour.filter(date__week_day=weekday+2)
+                if available and not appointment:
                     appointment_forms[position].append(AppointmentForm(initial={
                         'date': str(single_date) + ' ' + position,
                         'doctor': id_doctor,
                         'patient': id_patient,
-                        'attendant': available
+                        'attendant': request.user.attendant
                     }))
                 else:
                     appointment_forms[position].append('noform')
-    return render(request, 'appointments/new_appointment.html', { 'appointment_forms': appointment_forms, 'daynames': daynames })
+        return render(request, 'appointments/new_appointment.html', { 'appointment_forms': appointment_forms, 'daynames': daynames })
 
-def daterange(start_date, end_date):
+def date_range(start_date, end_date):
     for n in range(int ((end_date - start_date).days)):
         yield start_date + timedelta(n)
