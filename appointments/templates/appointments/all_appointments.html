@@ -38,7 +38,7 @@
               <button type="button" class="btn btn-outline-danger" disabled>Cancelada</button>
             {% else %}
               <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
-              {% if user.doctor and not appointment.date|is_past%}
+              {% if user.doctor and not appointment.attended and not appointment.date|is_past%}
                 <a class="btn btn-primary btn-sm mr-2 mb-2" href="{% url 'appointment' id=appointment.id %}">Atender</a>
               {% endif %}
               {% if not user.doctor and not appointment.date|is_past %}

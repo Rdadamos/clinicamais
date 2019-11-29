@@ -1,5 +1,5 @@
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
-from .models import Appointment, Doctor, DoctorSchedule
+from .models import Appointment, Doctor, DoctorSchedule, AppointmentExam, AppointmentMedicine
 from .forms import AppointmentForm, AppointmentInProgressForm, AppointmentExamForm, AppointmentMedicineForm, DoctorScheduleForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -60,7 +60,7 @@ def appointment(request, id):
         return redirect('home')
     if appointment.attended:
         return redirect('details_appointment', id=appointment.id)
-    patient_appointments = Appointment.objects.filter(date__lte=datetime.date.today(), canceled=False).order_by('-date')
+    patient_appointments = Appointment.objects.filter(date__lte=datetime.date.today(), canceled=False, patient=appointment.patient).order_by('-date')
     exam_forms = []
     medicine_forms = []
     if request.method == 'POST':
@@ -169,10 +169,13 @@ def new_appointment(request, id_patient, id_doctor):
 def details_appointment(request, id):
     try:
         appointment = get_object_or_404(Appointment, id=id)
-        return render(request, 'appointments/details_appointment.html', {'appointment': appointment})
     except:
         messages.error(request, 'Consulta não encontrada')
         return redirect('patient_appointments')
+    exams = AppointmentExam.objects.filter(appointment=appointment.id)
+    medicines = AppointmentMedicine.objects.filter(appointment=appointment.id)
+    patient_appointments = Appointment.objects.filter(date__lte=datetime.date.today(), canceled=False, patient=appointment.patient).order_by('-date')
+    return render(request, 'appointments/details_appointment.html', { 'appointment': appointment, 'exams': exams, 'medicines': medicines, 'patient_appointments': patient_appointments })
 
 @login_required(login_url='/')
 def cancel_appointment(request, id):

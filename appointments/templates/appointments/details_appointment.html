@@ -4,37 +4,116 @@
 
 {% block content %}
   <div>
-    <h3>Consulta</h3>
+    <h3>Detalhes da Consulta</h3>
     <h6>Data: {{ appointment.date }}</h6>
   </div>
   <table class="table table-responsive">
     <tbody>
-        <tr>
-          <td class="text-muted">Médico:</td>
-          <td>{{ appointment.doctor.name }}</td>
-        </tr>
-        <tr>
-          <td class="text-muted">Especialidade:</td>
-          <td>{{ appointment.doctor.speciality }}</td>
-        </tr>
-        <tr>
-          <td class="text-muted">Paciente:</td>
-          <td>{{ appointment.patient.name }}</td>
-        </tr>
-        <tr>
-          <td class="text-muted">Data de nascimento:</td>
-          <td>{{ appointment.patient.birthdate }}</td>
-        </tr>
-        <tr>
-          <td class="text-muted">Gênero:</td>
-          <td class="genderField">{{ appointment.patient.gender }}</td>
-        </tr>
-        <tr>
-          <td class="text-muted">Gênero:</td>
-          <td class="genderField">{{ appointment.gender }}</td>
-        </tr>
+      <tr>
+        <td class="text-muted">Médico:</td>
+        <td>{{ appointment.doctor.name }}</td>
+      </tr>
+      <tr>
+        <td class="text-muted">Especialidade:</td>
+        <td>{{ appointment.doctor.speciality }}</td>
+      </tr>
+      <tr>
+        <td class="text-muted">Paciente:</td>
+        <td>{{ appointment.patient.name }}</td>
+      </tr>
+      <tr>
+        <td class="text-muted">Data de nascimento:</td>
+        <td>{{ appointment.patient.birthdate }}</td>
+      </tr>
+      <tr>
+        <td class="text-muted">Gênero:</td>
+        <td class="genderField">{{ appointment.patient.gender }}</td>
+      </tr>
+      <tr>
+        <td class="text-muted">Prescrição:</td>
+        <td class="genderField">{{ appointment.prescription }}</td>
+      </tr>
     </tbody>
   </table>
+  <table class="table table-responsive">
+    <thead>
+      <tr>
+        <th scope="col" colspan="8">Medicamentos</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for medicine in medicines %}
+        <tr>
+          <td class="text-muted">Nome genérico:</td>
+          <td>{{ medicine.medicine.generic_name }}</td>
+          <td class="text-muted">Nome de fábrica:</td>
+          <td>{{ medicine.medicine.factory_name }}</td>
+          <td class="text-muted">Fabricante:</td>
+          <td>{{ medicine.medicine.manufacturer }}</td>
+          <td class="text-muted">Dosagem:</td>
+          <td>{{ medicine.dosage }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <table class="table table-responsive">
+    <thead>
+      <tr>
+        <th scope="col" colspan="4">Exames</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for exam in exams %}
+        <tr>
+          <td class="text-muted">Tipo:</td>
+          <td>{{ exam.exam.name }}</td>
+          <td class="text-muted">Resultado:</td>
+          <td>[aguardando]</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div id="accordion" class="bg-light my-5">
+    <div class="card border border-primary">
+      <div class="card-header border-bottom border-primary" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-light btn-block" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            Histórico de Consultas
+          </button>
+        </h5>
+      </div>
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+          <label for="searchInput">Pesquisar: </label>
+          <input type="text" id="searchInput" class="my-2">
+          <table class="table table-hover table-responsive" id="tableSearch">
+            <thead>
+              <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Médico</th>
+                <th scope="col">Medicamentos</th>
+                <th scope="col">Exames</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for appointment in patient_appointments %}
+                <tr>
+                  <th scope="row">{{ appointment.date }}</th>
+                  <td>{{ appointment.doctor.name }}</td>
+                  <td></td>
+                  <td></td>
+                  <td class="text-center">
+                    <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
   <a class="btn btn-primary" href="{{ request.META.HTTP_REFERER }}">Voltar</a>
   {% if user.attendant %}
     <a class="btn btn-success ml-3 mr-5" href="{% url 'patient_appointments' id_patient=appointment.patient.id %}">Todas consultas de {{ appointment.patient.name }}</a>
