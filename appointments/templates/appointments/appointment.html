@@ -1,0 +1,94 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clínica Mais - Consulta{% endblock %}
+
+{% block content %}
+  <div>
+    <h3>Consulta em andamento</h3>
+  </div>
+  <table class="table table-responsive">
+    <tbody>
+        <tr>
+          <td class="text-muted">Paciente:</td>
+          <td>{{ appointment.patient.name }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Data de nascimento do paciente:</td>
+          <td>{{ appointment.patient.birthdate }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Gênero:</td>
+          <td class="genderField">{{ appointment.patient.gender }}</td>
+        </tr>
+    </tbody>
+  </table>
+  <form method="post" class="myForm">
+    {% csrf_token %}
+    <table class="table table-responsive">
+      <tbody>
+        <tr>
+          {% for field in appointment_form %}
+            <td class="text-muted">{{ field.label_tag }}</td>
+            <td>{{ field }}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-responsive">
+      <tbody>
+        {% for medicine_form in medicine_forms %}
+          <tr class="addMedicine">
+            {% for field in medicine_form %}
+              <td class="text-muted">{{ field.label_tag }}</td>
+              <td>{{ field }}</td>
+            {% endfor %}
+            <td><button type="button" class="btn btn-success btn-sm addMedicineBtn ml-0">Adicionar outro medicamento</button></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+  </form>
+
+
+  <div id="accordion" class="bg-light my-5">
+    <div class="card border border-primary">
+      <div class="card-header border-bottom border-primary" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-light btn-block" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            Histórico de Consultas
+          </button>
+        </h5>
+      </div>
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+          <label for="searchInput">Pesquisar: </label>
+          <input type="text" id="searchInput" class="my-2">
+          <table class="table table-hover table-responsive" id="tableSearch">
+            <thead>
+              <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Medicamentos</th>
+                <th scope="col">Exames</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for appointment in patient_appointments %}
+                <tr>
+                  <th scope="row">{{ appointment.date }}</th>
+                  <td></td>
+                  <td></td>
+                  <td class="text-center">
+                    <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="btn btn-primary" href="{% url 'home' %}">Home</a>
+{% endblock %}

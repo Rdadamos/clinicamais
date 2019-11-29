@@ -33,7 +33,7 @@
             {% else %}
               <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
               {% if user.doctor %}
-                <a class="btn btn-primary btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Atender</a>
+                <a class="btn btn-primary btn-sm mr-2 mb-2" href="{% url 'appointment' id=appointment.id %}">Atender</a>
               {% endif %}
             {% endif %}
           </td>

@@ -2,7 +2,7 @@
 
 {% block title %}Clínica Mais - Todas as consultas{% endblock %}
 
- {% load app_filters %}
+{% load app_filters %}
 
 {% block content %}
   <div>
@@ -31,7 +31,7 @@
             {% else %}
               <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
               {% if user.doctor and not appointment.date|is_past%}
-                <a class="btn btn-primary btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Atender</a>
+                <a class="btn btn-primary btn-sm mr-2 mb-2" href="{% url 'appointment' id=appointment.id %}">Atender</a>
               {% endif %}
               {% if not user.doctor and not appointment.date|is_past %}
                 <button type="button" class="btn btn-danger btn-sm deleteBtn mb-2" data-url="{% url 'cancel_appointment' id=appointment.id %}" data-toggle="modal" data-target="#deleteModal">Cancelar consulta</button>

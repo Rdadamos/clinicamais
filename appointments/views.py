@@ -1,6 +1,6 @@
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 from .models import Appointment, Doctor, DoctorSchedule
-from .forms import AppointmentForm, DoctorScheduleForm
+from .forms import AppointmentForm, AppointmentInProgressForm, AppointmentExamForm, AppointmentMedicineForm, DoctorScheduleForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import datetime as datetime
@@ -50,6 +50,31 @@ def doctor_schedule(request, id):
         return redirect('all_doctor')
     messages.info(request, 'Campos selecionados indicam que o médico atende nesse horário')
     return render(request, 'appointments/doctor_schedule.html', { 'schedule_forms': schedule_forms, 'doctor': doctor })
+
+@login_required(login_url='/')
+def appointment(request, id):
+    try:
+        appointment = get_object_or_404(Appointment, id=id)
+    except:
+        messages.error(request, 'Consulta não encontrada')
+        return redirect('home')
+    patient_appointments = Appointment.objects.filter(date__lte=datetime.date.today(), canceled=False).order_by('-date')
+    if request.method == 'POST':
+        pass
+        # appointment_form = AppointmentInProgressForm(request.POST)
+        # attendant_form = AttendantForm(request.POST)
+        # if user_form.is_valid() and attendant_form.is_valid():
+        #     saveUser(user_form, attendant_form)
+        #     messages.success(request, 'Novo Atendente criado com sucesso')
+        #     return redirect('all_attendant')
+        # else:
+        #     messages.error(request, 'Verifique os erros abaixo')
+    else:
+        appointment_form = AppointmentInProgressForm()
+        medicine_forms = []
+        for index in range(0, 10):
+            medicine_forms.append(AppointmentMedicineForm(prefix=str(index), initial={ 'appointment': id }))
+    return render(request, 'appointments/appointment.html', {'appointment': appointment, 'patient_appointments': patient_appointments, 'appointment_form': appointment_form, 'medicine_forms': medicine_forms })
 
 @login_required(login_url='/')
 def all_appointments(request):

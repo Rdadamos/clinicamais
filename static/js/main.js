@@ -51,4 +51,9 @@ $(document).ready(function() {
   $(".tableAppointment tr").each(function() {
     $(this).children().eq(sunday_index).remove();
   });
+
+  $(".addMedicine:not(:first), .addMedicine td:eq(4), .addMedicine td:eq(5)").addClass("d-none");
+  $(".addMedicineBtn").bind("click", (function () {
+    $(this).addClass('d-none').parents(".addMedicine").next().removeClass("d-none").find("td:eq(4), td:eq(5)").addClass("d-none");
+  }));
 });
