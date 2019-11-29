@@ -52,15 +52,21 @@ $(document).ready(function() {
     $(this).children().eq(sunday_index).remove();
   });
 
-  $(".addMedicine:not(:first), .addMedicine td:eq(4), .addMedicine td:eq(5)").appendTo(".holdInputsMedicineForm");
+  $(".addMedicine:not(:first)").appendTo(".holdInputsMedicineForm");
+  $(".addMedicine td:eq(4), .addMedicine td:eq(5)").addClass("d-none")
   $(".addMedicineBtn").bind("click", (function () {
     $(this).addClass('d-none');
     $(".holdInputsMedicineForm").find(".addMedicine:first").appendTo('.medicineTb tbody').find("td:eq(4), td:eq(5)").addClass("d-none");
+    var total = +$("#totalExams").val() + 1;
+    $("#totalExams").val(total);
   }));
 
-  $(".addExam:not(:first), .addExam td:eq(2), .addExam td:eq(3)").appendTo(".holdInputsExamForm");
+  $(".addExam:not(:first)").appendTo(".holdInputsExamForm");
+  $(".addExam td:eq(2), .addExam td:eq(3)").addClass("d-none")
   $(".addExamBtn").bind("click", (function () {
     $(this).addClass('d-none');
     $(".holdInputsExamForm").find(".addExam:first").appendTo('.examTb tbody').find("td:eq(2), td:eq(3)").addClass("d-none");
+    var total = +$("#totalMedicines").val() + 1;
+    $("#totalMedicines").val(total);
   }));
 });

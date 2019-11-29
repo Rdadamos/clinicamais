@@ -11,6 +11,7 @@ class Appointment(models.Model):
     attendant = models.ForeignKey(Attendant, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     canceled = models.BooleanField(default=False)
+    attended = models.BooleanField(default=False)
 
 class AppointmentExam(models.Model):
     appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)

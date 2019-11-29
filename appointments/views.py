@@ -58,21 +58,39 @@ def appointment(request, id):
     except:
         messages.error(request, 'Consulta não encontrada')
         return redirect('home')
+    if appointment.attended:
+        return redirect('details_appointment', id=appointment.id)
     patient_appointments = Appointment.objects.filter(date__lte=datetime.date.today(), canceled=False).order_by('-date')
+    exam_forms = []
+    medicine_forms = []
     if request.method == 'POST':
-        pass
-        # appointment_form = AppointmentInProgressForm(request.POST)
-        # attendant_form = AttendantForm(request.POST)
-        # if user_form.is_valid() and attendant_form.is_valid():
-        #     saveUser(user_form, attendant_form)
-        #     messages.success(request, 'Novo Atendente criado com sucesso')
-        #     return redirect('all_attendant')
-        # else:
-        #     messages.error(request, 'Verifique os erros abaixo')
+        formInvalid = False
+        appointment_form = AppointmentInProgressForm(request.POST, instance=appointment)
+        if appointment_form.is_valid():
+            appointment_form.save()
+        else:
+            formInvalid = True
+        totalExams = int(request.POST.get('totalExams'))
+        totalMedicines = int(request.POST.get('totalMedicines'))
+        for index in range(0, totalExams):
+            exam_forms.append(AppointmentExamForm(request.POST, prefix=str(index)))
+            if exam_forms[index].is_valid():
+                exam_forms[index].save()
+            else:
+                formInvalid = True
+        for index in range(0, totalMedicines):
+            medicine_forms.append(AppointmentMedicineForm(request.POST, prefix=str(index)))
+            if medicine_forms[index].is_valid():
+                medicine_forms[index].save()
+            else:
+                formInvalid = True
+        if formInvalid:
+            messages.error(request, 'Verifique os erros abaixo')
+            return render(request, 'appointments/appointment.html', {'appointment': appointment, 'patient_appointments': patient_appointments, 'appointment_form': appointment_form, 'medicine_forms': medicine_forms, 'exam_forms': exam_forms })
+        else:
+            return redirect('details_appointment', id=appointment.id)
     else:
-        appointment_form = AppointmentInProgressForm()
-        exam_forms = []
-        medicine_forms = []
+        appointment_form = AppointmentInProgressForm(instance=appointment, initial={ 'attended': True })
         for index in range(0, 10):
             exam_forms.append(AppointmentExamForm(prefix=str(index), initial={ 'appointment': id }))
             medicine_forms.append(AppointmentMedicineForm(prefix=str(index), initial={ 'appointment': id }))

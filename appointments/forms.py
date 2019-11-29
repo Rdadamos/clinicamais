@@ -30,10 +30,14 @@ class DoctorScheduleForm(forms.ModelForm):
 class AppointmentInProgressForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = {'prescription'}
-        labels = {'prescription': 'Prescrição'}
+        fields = {'prescription', 'attended'}
+        labels = {
+            'prescription': 'Prescrição',
+            'attended': ''
+        }
         widgets = {
-            'prescription': forms.Textarea(attrs={'placeholder': 'Preencher'})
+            'prescription': forms.Textarea(attrs={'placeholder': 'Preencher'}),
+            'attended': forms.HiddenInput()
         }
 
 class CustomMedicineChoiceField(forms.ModelChoiceField):
@@ -49,7 +53,7 @@ class AppointmentMedicineForm(forms.ModelForm):
             'dosage': 'Dosagem',
             'appointment': ''
         }
-        widgets = {'appointment': forms.HiddenInput()}
+        widgets = { 'appointment': forms.HiddenInput() }
 
 class CustomExamChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
