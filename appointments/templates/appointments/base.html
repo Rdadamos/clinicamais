@@ -23,9 +23,11 @@
               <a class="btn btn-dark ml-4" href="{% url 'logout' %}">Sair</a>
             </div>
           </div>
-          <div class="menubarBox">
-            {% include "appointments/menubar.html" %}
-          </div>
+          {% if not user.doctor %}
+            <div class="menubarBox">
+              {% include "appointments/menubar.html" %}
+            </div>
+          {% endif %}
         </div>
     {% endif %}
     <div class="container pt-3 pb-5">

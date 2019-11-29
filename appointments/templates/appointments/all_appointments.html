@@ -6,7 +6,11 @@
 
 {% block content %}
   <div>
-    <h3>Todas as consultas</h3>
+    {% if user.doctor %}
+      <h3>Minhas consultas</h3>
+    {% else %}
+      <h3>Todas as consultas</h3>
+    {% endif %}
     <label for="searchInput">Pesquisar: </label>
     <input type="text" id="searchInput" class="my-2">
   </div>
@@ -14,7 +18,9 @@
     <thead>
       <tr>
         <th scope="col">Data</th>
-        <th scope="col">Médico</th>
+        {% if not user.doctor %}
+          <th scope="col">Médico</th>
+        {% endif %}
         <th scope="col">Paciente</th>
         <th scope="col">Ações</th>
       </tr>
@@ -23,7 +29,9 @@
       {% for appointment in appointments %}
         <tr>
           <th scope="row">{{ appointment.date }}</th>
-          <td>{{ appointment.doctor.name }}</td>
+          {% if not user.doctor %}
+            <td>{{ appointment.doctor.name }}</td>
+          {% endif %}
           <td>{{ appointment.patient.name }}</td>
           <td class="text-center">
             {% if appointment.canceled %}
@@ -42,5 +50,8 @@
       {% endfor %}
     </tbody>
   </table>
+  <div class="text-center">
+    <a class="btn btn-secondary" href="{% url 'home' %}">Home</a>
+  </div>
   {% include "users/modal_delete.html" %}
 {% endblock %}

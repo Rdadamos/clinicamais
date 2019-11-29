@@ -7,8 +7,6 @@
     <a class="menuBtn btn btn-outline-info" href="{% url 'all_doctor' %}">Médicos</a>
     <a class="menuBtn btn btn-outline-info" href="{% url 'all_patient' %}">Pacientes</a>
     <a class="menuBtn btn btn-outline-info" href="{% url 'all_medicine' %}">Medicamentos</a>
-  {% endif %}
-  {% if not user.is_superuser %}
     <a class="menuBtn btn btn-outline-info" href="{% url 'all_appointments' %}">Todas as consultas</a>
   {% endif %}
 </div>

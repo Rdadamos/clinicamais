@@ -22,7 +22,7 @@
         </tr>
     </tbody>
   </table>
-  <a class="btn btn-success ml-3" href="{% url 'all_medicine' %}">Voltar</a>
+  <a class="btn btn-success" href="{% url 'all_medicine' %}">Voltar</a>
   <a class="btn btn-secondary ml-4" href="{% url 'update_medicine' id=medicine.id %}">Editar</a>
   <button type="button" class="btn btn-danger deleteBtn ml-5" data-url="{% url 'delete_medicine' id=medicine.id %}" data-toggle="modal" data-target="#deleteModal">Deletar</button>
   {% include "users/modal_delete.html" %}

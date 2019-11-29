@@ -32,13 +32,16 @@ class AppointmentInProgressForm(forms.ModelForm):
         model = Appointment
         fields = {'prescription'}
         labels = {'prescription': 'Prescrição'}
+        widgets = {
+            'prescription': forms.Textarea(attrs={'placeholder': 'Preencher'})
+        }
 
-class CustomModelChoiceField(forms.ModelChoiceField):
+class CustomMedicineChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return "%s (%s)" % (obj.factory_name, obj.generic_name)
 
 class AppointmentMedicineForm(forms.ModelForm):
-    medicine = CustomModelChoiceField(queryset=Medicine.objects.all(), label="Medicamento")
+    medicine = CustomMedicineChoiceField(queryset=Medicine.objects.all(), label="Medicamento")
     class Meta:
         model = AppointmentMedicine
         fields = ('medicine', 'dosage', 'appointment')
@@ -48,7 +51,14 @@ class AppointmentMedicineForm(forms.ModelForm):
         }
         widgets = {'appointment': forms.HiddenInput()}
 
+class CustomExamChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return "%s" % (obj.name)
+
 class AppointmentExamForm(forms.ModelForm):
+    exam = CustomExamChoiceField(queryset=Exam.objects.all(), label="Exame")
     class Meta:
         model = AppointmentExam
-        fields = {'exam'}
+        fields = ('exam', 'appointment')
+        labels = { 'appointment': '' }
+        widgets = { 'appointment': forms.HiddenInput() }

@@ -71,10 +71,12 @@ def appointment(request, id):
         #     messages.error(request, 'Verifique os erros abaixo')
     else:
         appointment_form = AppointmentInProgressForm()
+        exam_forms = []
         medicine_forms = []
         for index in range(0, 10):
+            exam_forms.append(AppointmentExamForm(prefix=str(index), initial={ 'appointment': id }))
             medicine_forms.append(AppointmentMedicineForm(prefix=str(index), initial={ 'appointment': id }))
-    return render(request, 'appointments/appointment.html', {'appointment': appointment, 'patient_appointments': patient_appointments, 'appointment_form': appointment_form, 'medicine_forms': medicine_forms })
+    return render(request, 'appointments/appointment.html', {'appointment': appointment, 'patient_appointments': patient_appointments, 'appointment_form': appointment_form, 'medicine_forms': medicine_forms, 'exam_forms': exam_forms })
 
 @login_required(login_url='/')
 def all_appointments(request):

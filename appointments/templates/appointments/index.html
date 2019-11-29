@@ -4,7 +4,11 @@
 
 {% block content %}
   <div>
-    <h3>Próximas Consultas</h3>
+    {% if user.doctor %}
+      <h3>Minhas próximas consultas</h3>
+    {% else %}
+      <h3>Próximas consultas</h3>
+    {% endif %}
     <label for="searchInput">Pesquisar: </label>
     <input type="text" id="searchInput" class="my-2">
   </div>

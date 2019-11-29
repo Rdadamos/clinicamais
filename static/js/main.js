@@ -52,8 +52,15 @@ $(document).ready(function() {
     $(this).children().eq(sunday_index).remove();
   });
 
-  $(".addMedicine:not(:first), .addMedicine td:eq(4), .addMedicine td:eq(5)").addClass("d-none");
+  $(".addMedicine:not(:first), .addMedicine td:eq(4), .addMedicine td:eq(5)").appendTo(".holdInputsMedicineForm");
   $(".addMedicineBtn").bind("click", (function () {
-    $(this).addClass('d-none').parents(".addMedicine").next().removeClass("d-none").find("td:eq(4), td:eq(5)").addClass("d-none");
+    $(this).addClass('d-none');
+    $(".holdInputsMedicineForm").find(".addMedicine:first").appendTo('.medicineTb tbody').find("td:eq(4), td:eq(5)").addClass("d-none");
+  }));
+
+  $(".addExam:not(:first), .addExam td:eq(2), .addExam td:eq(3)").appendTo(".holdInputsExamForm");
+  $(".addExamBtn").bind("click", (function () {
+    $(this).addClass('d-none');
+    $(".holdInputsExamForm").find(".addExam:first").appendTo('.examTb tbody').find("td:eq(2), td:eq(3)").addClass("d-none");
   }));
 });
