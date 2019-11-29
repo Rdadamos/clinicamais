@@ -11,7 +11,7 @@ from django.utils.translation import gettext
 def index(request):
     try:
         doctor = request.user.doctor.id
-        appointments = Appointment.objects.filter(doctor=doctor, date__gte=datetime.date.today()).order_by('date')
+        appointments = Appointment.objects.filter(doctor=doctor, date__gte=datetime.date.today(), canceled=False).order_by('date')
     except:
         appointments = Appointment.objects.filter(date__gte=datetime.date.today()).order_by('date')
     return render(request, 'appointments/index.html', { 'appointments': appointments })
@@ -88,7 +88,7 @@ def appointment(request, id):
             messages.error(request, 'Verifique os erros abaixo')
             return render(request, 'appointments/appointment.html', {'appointment': appointment, 'patient_appointments': patient_appointments, 'appointment_form': appointment_form, 'medicine_forms': medicine_forms, 'exam_forms': exam_forms })
         else:
-            return redirect('details_appointment', id=appointment.id)
+            return redirect('home')
     else:
         appointment_form = AppointmentInProgressForm(instance=appointment, initial={ 'attended': True })
         for index in range(0, 10):
@@ -100,7 +100,7 @@ def appointment(request, id):
 def all_appointments(request):
     try:
         doctor = request.user.doctor.id
-        appointments = Appointment.objects.filter(doctor=doctor).order_by('date')
+        appointments = Appointment.objects.filter(doctor=doctor, canceled=False).order_by('date')
     except:
         appointments = Appointment.objects.order_by('date')
     return render(request, 'appointments/all_appointments.html', {'appointments': appointments})

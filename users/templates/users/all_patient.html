@@ -5,7 +5,7 @@
 {% block content %}
   <div>
     <h3 class="d-inline-block float-left">Pacientes</h3>
-    <a class="btn btn-primary ml-3" href="{% url 'new_patient' %}">Novo</a>
+    <a class="btn btn-primary ml-3" href="{% url 'new_patient' %}">Novo Paciente</a>
   </div>
   <div class="clearBoth">
     <label for="searchInput">Pesquisar: </label>
@@ -30,6 +30,7 @@
           <td class="genderField">{{ patient.gender }}</td>
           <td>
             <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_patient' id=patient.id %}">Ver</a>
+            <a class="btn btn-primary btn-sm mr-2 mb-2" href="{% url 'new_appointment_doctor' id_patient=patient.id %}">Nova consulta</a>
             <a class="btn btn-warning btn-sm mr-2 mb-2" href="{% url 'patient_appointments' id_patient=patient.id %}">Consultas</a>
             <a class="btn btn-secondary btn-sm mr-2 mb-2" href="{% url 'update_patient' id=patient.user.id %}">Editar</a>
             <button type="button" class="btn btn-danger btn-sm deleteBtn mb-2" data-url="{% url 'delete_patient' id=patient.id %}" data-toggle="modal" data-target="#deleteModal">Deletar</button>

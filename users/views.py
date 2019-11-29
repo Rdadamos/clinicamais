@@ -1,12 +1,12 @@
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from .models import Attendant, Doctor, Patient, User
-from appointments.models import DoctorSchedule
+from appointments.models import Appointment, DoctorSchedule
 from .forms import AttendantForm, DoctorForm, PatientForm, UserPatientForm, UserForm
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .decorators import attendant_only
-from datetime import datetime
+from datetime import datetime, date
 import datetime as dt
 
 # Attendant
@@ -148,14 +148,15 @@ def all_patient(request):
         messages.error(request, 'Nenhum paciente cadastrado')
         return redirect('new_patient')
 
-@attendant_only
+@login_required(login_url='/')
 def details_patient(request, id):
     try:
         patient = get_object_or_404(Patient, id=id)
-        return render(request, 'users/details_patient.html', {'patient': patient})
     except:
         messages.error(request, 'Paciente não encontrado')
         return redirect('all_patient')
+    patient_appointments = Appointment.objects.filter(date__lte=dt.date.today(), canceled=False, patient=patient).order_by('-date')
+    return render(request, 'users/details_patient.html', { 'patient': patient, 'patient_appointments': patient_appointments})
 
 @attendant_only
 def new_patient(request):

@@ -105,8 +105,6 @@
               <tr>
                 <th scope="col">Data</th>
                 <th scope="col">Médico</th>
-                <th scope="col">Medicamentos</th>
-                <th scope="col">Exames</th>
                 <th scope="col">Ações</th>
               </tr>
             </thead>
@@ -115,8 +113,6 @@
                 <tr>
                   <th scope="row">{{ appointment.date }}</th>
                   <td>{{ appointment.doctor.name }}</td>
-                  <td></td>
-                  <td></td>
                   <td class="text-center">
                     <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
                   </td>
