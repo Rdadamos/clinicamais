@@ -1,19 +1,14 @@
 {% extends 'appointments/base.html' %}
 
+{% block title %}Clínica Mais - Paciente{% endblock %}
+
 {% block content %}
   <div>
-    <h3 class="d-inline-block float-left">Paciente: {{ patient.name }}</h3>
+    <h3 class="d-inline-block">Paciente: {{ patient.name }}</h3>
   </div>
   <table class="table table-responsive">
     <tbody>
         <tr>
-          <td class="text-muted">Usuário:</td>
-          <td>{{ patient.user.username }}</td>
-        </tr>
-        <tr>
-          <td class="text-muted">E-mail:</td>
-          <td>{{ patient.user.email }}</td>
-        </tr>
           <td class="text-muted">Telefone:</td>
           <td>{{ patient.phone }}</td>
         </tr>
@@ -27,8 +22,46 @@
         </tr>
     </tbody>
   </table>
-  <a class="btn btn-primary ml-3" href="{% url 'all_patient' %}">Voltar</a>
-  <a class="btn btn-secondary ml-4" href="{% url 'update_patient' id=patient.user.id %}">Editar</a>
+  <div id="accordion" class="bg-light my-5">
+    <div class="card border border-primary">
+      <div class="card-header border-bottom border-primary" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-light btn-block" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            Histórico de Consultas
+          </button>
+        </h5>
+      </div>
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+          <label for="searchInput">Pesquisar: </label>
+          <input type="text" id="searchInput" class="my-2">
+          <table class="table table-hover table-responsive" id="tableSearch">
+            <thead>
+              <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Médico</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for appointment in patient_appointments %}
+                <tr>
+                  <th scope="row">{{ appointment.date }}</th>
+                  <td>{{ appointment.doctor.name }}</td>
+                  <td class="text-center">
+                    <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="btn btn-success" href="{% url 'all_patient' %}">Voltar</a>
+  <a class="btn btn-primary ml-3" href="{% url 'new_appointment_doctor' id_patient=patient.id %}">Agendar nova consulta</a>
+  <a class="btn btn-secondary ml-3" href="{% url 'update_patient' id=patient.user.id %}">Editar</a>
   <button type="button" class="btn btn-danger deleteBtn ml-5" data-url="{% url 'delete_patient' id=patient.id %}" data-toggle="modal" data-target="#deleteModal">Deletar</button>
   {% include "users/modal_delete.html" %}
 {% endblock %}

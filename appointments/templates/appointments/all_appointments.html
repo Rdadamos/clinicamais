@@ -1,16 +1,15 @@
-{% extends "appointments/base.html" %}
+{% extends 'appointments/base.html' %}
 
-{% block title %}Clínica Mais - Home{% endblock %}
+{% block title %}Clínica Mais - Todas as consultas{% endblock %}
+
+{% load app_filters %}
 
 {% block content %}
-  {% if user.doctor %}
-    <a class="btn btn-info mb-3" href="{% url 'all_appointments' %}">Todas minhas consultas</a>
-  {% endif %}
   <div>
     {% if user.doctor %}
-      <h3>Minhas próximas consultas</h3>
+      <h3>Minhas consultas</h3>
     {% else %}
-      <h3>Próximas consultas</h3>
+      <h3>Todas as consultas</h3>
     {% endif %}
     <label for="searchInput">Pesquisar: </label>
     <input type="text" id="searchInput" class="my-2">
@@ -39,8 +38,11 @@
               <button type="button" class="btn btn-outline-danger" disabled>Cancelada</button>
             {% else %}
               <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
-              {% if user.doctor and not appointment.attended %}
+              {% if user.doctor and not appointment.attended and not appointment.date|is_past%}
                 <a class="btn btn-primary btn-sm mr-2 mb-2" href="{% url 'appointment' id=appointment.id %}">Atender</a>
+              {% endif %}
+              {% if not user.doctor and not appointment.date|is_past %}
+                <button type="button" class="btn btn-danger btn-sm deleteBtn mb-2" data-url="{% url 'cancel_appointment' id=appointment.id %}" data-toggle="modal" data-target="#deleteModal">Cancelar consulta</button>
               {% endif %}
             {% endif %}
           </td>
@@ -48,4 +50,8 @@
       {% endfor %}
     </tbody>
   </table>
+  <div class="text-center">
+    <a class="btn btn-secondary" href="{% url 'home' %}">Home</a>
+  </div>
+  {% include "users/modal_delete.html" %}
 {% endblock %}

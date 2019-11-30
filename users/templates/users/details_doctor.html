@@ -1,8 +1,10 @@
 {% extends 'appointments/base.html' %}
 
+{% block title %}Clínica Mais - Médico{% endblock %}
+
 {% block content %}
   <div>
-    <h3 class="d-inline-block float-left">Médico: {{ doctor.name }}</h3>
+    <h3 class="d-inline-block">Médico: {{ doctor.name }}</h3>
   </div>
   <table class="table table-responsive">
     <tbody>
@@ -14,6 +16,7 @@
           <td class="text-muted">E-mail:</td>
           <td>{{ doctor.user.email }}</td>
         </tr>
+        <tr>
           <td class="text-muted">Telefone:</td>
           <td>{{ doctor.phone }}</td>
         </tr>
@@ -23,7 +26,8 @@
         </tr>
     </tbody>
   </table>
-  <a class="btn btn-primary ml-3" href="{% url 'all_doctor' %}">Voltar</a>
+  <a class="btn btn-success" href="{% url 'all_doctor' %}">Voltar</a>
+  <a class="btn btn-warning ml-3" href="{% url 'doctor_schedule' id=doctor.id %}">Agenda</a>
   <a class="btn btn-secondary ml-4" href="{% url 'update_doctor' id=doctor.user.id %}">Editar</a>
   <button type="button" class="btn btn-danger deleteBtn ml-5" data-url="{% url 'delete_doctor' id=doctor.id %}" data-toggle="modal" data-target="#deleteModal">Deletar</button>
   {% include "users/modal_delete.html" %}

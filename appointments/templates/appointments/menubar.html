@@ -1,0 +1,14 @@
+{% block menubar %}
+<div class="container my-3">
+  {% if user.is_superuser %}
+    <a class="menuBtn btn btn-light" href="{% url 'all_attendant' %}">Atendentes</a>
+    <a class="menuBtn btn btn-light" href="{% url 'statistics' %}">Estatísticas de Atendimentos</a>
+  {% endif %}
+  {% if user.attendant %}
+    <a class="menuBtn btn btn-outline-info" href="{% url 'all_doctor' %}">Médicos</a>
+    <a class="menuBtn btn btn-outline-info" href="{% url 'all_patient' %}">Pacientes</a>
+    <a class="menuBtn btn btn-outline-info" href="{% url 'all_medicine' %}">Medicamentos</a>
+    <a class="menuBtn btn btn-outline-info" href="{% url 'all_appointments' %}">Todas as consultas</a>
+  {% endif %}
+</div>
+{% endblock %}

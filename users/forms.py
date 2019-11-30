@@ -1,6 +1,5 @@
 from django import forms
 from django.forms.widgets import DateInput
-from django.contrib.admin.widgets import AdminDateWidget
 from .models import Attendant, Doctor, Patient, User
 
 
@@ -51,7 +50,6 @@ class DoctorForm(forms.ModelForm):
         }
 
 class PatientForm(forms.ModelForm):
-    # birthdate = DateField(widget=AdminDateWidget)
     class Meta:
         model = Patient
         fields = ('name', 'phone', 'birthdate', 'gender')
@@ -67,5 +65,14 @@ class PatientForm(forms.ModelForm):
             'birthdate': 'Data de nascimento'
         }
         widgets = {
-            'birthdate': DateInput(attrs={'type':'date'})
+            'birthdate': DateInput()
+        }
+
+class UserPatientForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+        widgets = {
+            'username': forms.HiddenInput(),
+            'password': forms.HiddenInput()
         }

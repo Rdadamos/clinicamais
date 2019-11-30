@@ -1,0 +1,127 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clínica Mais - Consulta{% endblock %}
+
+{% block content %}
+  <div>
+    <h3 class="text-dark"><strong>Consulta em andamento</strong></h3>
+  </div>
+  <table class="table table-responsive">
+    <thead>
+      <tr>
+        <th scope="col">Data:</th>
+        <th scope="col">{{ appointment.date }}</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="text-muted">Paciente:</td>
+          <td>{{ appointment.patient.name }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Data de nascimento:</td>
+          <td>{{ appointment.patient.birthdate }}</td>
+        </tr>
+        <tr>
+          <td class="text-muted">Gênero:</td>
+          <td class="genderField">{{ appointment.patient.gender }}</td>
+        </tr>
+    </tbody>
+  </table>
+  <form method="post" class="myForm">
+    {% csrf_token %}
+    <h5 class="text-dark"><strong>Formulário de Atendimento</strong></h5>
+    <table class="table table-responsive">
+      <tbody>
+        <tr>
+          {% for field in appointment_form %}
+            <td class="text-muted">{{ field.label_tag }}</td>
+            <td>{{ field }}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-responsive medicineTb">
+      <thead>
+        <tr>
+          <th scope="col" colspan="5">Medicamentos</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for medicine_form in medicine_forms %}
+          <tr class="addMedicine">
+            {% for field in medicine_form %}
+              <td class="text-muted">{{ field.label_tag }}</td>
+              <td>{{ field }}</td>
+            {% endfor %}
+            <td><button type="button" class="btn btn-success btn-sm addMedicineBtn ml-0">Adicionar outro medicamento</button></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <table class="table table-responsive examTb">
+      <thead>
+        <tr>
+          <th scope="col" colspan="3">Solicitar exames</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for exam_form in exam_forms %}
+          <tr class="addExam">
+            {% for field in exam_form %}
+              <td class="text-muted">{{ field.label_tag }}</td>
+              <td>{{ field }}</td>
+            {% endfor %}
+            <td><button type="button" class="btn btn-success btn-sm addExamBtn ml-0">Adicionar outro exame</button></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="text-center">
+      <button type="button" class="btn btn-warning btn-lg btnNewAppointment ml-0">Encerrar consulta</button>
+      <button type="submit" class="btn btn-primary btn-lg btnSubmitNewAppointment d-none ml-0">Salvar</button>
+    </div>
+    <input type="hidden" id="totalExams" name="totalExams" value="1">
+    <input type="hidden" id="totalMedicines" name="totalMedicines" value="1">
+  </form>
+  <p class="text-muted"><small>Para salvar, encerre a consulta.</small></p>
+  <div class="holdInputsMedicineForm d-none"></div>
+  <div class="holdInputsExamForm d-none"></div>
+  <div id="accordion" class="bg-light my-5">
+    <div class="card border border-primary">
+      <div class="card-header border-bottom border-primary" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-light btn-block" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            Histórico de Consultas
+          </button>
+        </h5>
+      </div>
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+          <label for="searchInput">Pesquisar: </label>
+          <input type="text" id="searchInput" class="my-2">
+          <table class="table table-hover table-responsive" id="tableSearch">
+            <thead>
+              <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Médico</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for appointment in patient_appointments %}
+                <tr>
+                  <th scope="row">{{ appointment.date }}</th>
+                  <td>{{ appointment.doctor.name }}</td>
+                  <td class="text-center">
+                    <a class="btn btn-success btn-sm mr-2 mb-2" href="{% url 'details_appointment' id=appointment.id %}">Ver</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
