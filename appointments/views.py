@@ -66,29 +66,29 @@ def appointment(request, id):
     if request.method == 'POST':
         formInvalid = False
         appointment_form = AppointmentInProgressForm(request.POST, instance=appointment)
-        if appointment_form.is_valid():
-            appointment_form.save()
-        else:
+        if not appointment_form.is_valid():
             formInvalid = True
         totalExams = int(request.POST.get('totalExams'))
         totalMedicines = int(request.POST.get('totalMedicines'))
         for index in range(0, totalExams):
             exam_forms.append(AppointmentExamForm(request.POST, prefix=str(index)))
-            if exam_forms[index].is_valid():
-                exam_forms[index].save()
-            else:
+            if not exam_forms[index].is_valid():
                 formInvalid = True
         for index in range(0, totalMedicines):
             medicine_forms.append(AppointmentMedicineForm(request.POST, prefix=str(index)))
-            if medicine_forms[index].is_valid():
-                medicine_forms[index].save()
-            else:
+            if not medicine_forms[index].is_valid():
                 formInvalid = True
-        if formInvalid:
+        if not formInvalid:
+            appointment_form.save()
+            for index in range(0, totalExams):
+                exam_forms[index].save()
+            for index in range(0, totalMedicines):
+                medicine_forms[index].save()
+            messages.success(request, 'Consulta marcada com sucesso')
+            return redirect('home')
+        else:
             messages.error(request, 'Verifique os erros abaixo')
             return render(request, 'appointments/appointment.html', {'appointment': appointment, 'patient_appointments': patient_appointments, 'appointment_form': appointment_form, 'medicine_forms': medicine_forms, 'exam_forms': exam_forms })
-        else:
-            return redirect('home')
     else:
         appointment_form = AppointmentInProgressForm(instance=appointment, initial={ 'attended': True })
         for index in range(0, 10):

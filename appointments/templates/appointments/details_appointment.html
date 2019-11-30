@@ -31,10 +31,12 @@
         <td class="text-muted">Gênero:</td>
         <td class="genderField">{{ appointment.patient.gender }}</td>
       </tr>
-      <tr>
-        <td class="text-muted">Prescrição:</td>
-        <td class="genderField">{{ appointment.prescription }}</td>
-      </tr>
+      {% if appointment.prescription %}
+        <tr>
+          <td class="text-muted">Prescrição:</td>
+          <td>{{ appointment.prescription }}</td>
+        </tr>
+      {% endif %}
     </tbody>
   </table>
   {% if medicines %}
