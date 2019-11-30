@@ -1,0 +1,118 @@
+{% extends "appointments/base.html" %}
+
+{% block title %}Clínica Mais - Estatísticas de Atendimentos{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <div class="card text-white text-center bg-success mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h2 class="card-title display-1">{{ total_appointments }}</h2>
+        </div>
+        <div class="card-header">Consultas marcadas</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card text-white text-center bg-success mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h2 class="card-title display-1">{{ total_attended }}</h2>
+        </div>
+        <div class="card-header">Consultas atendidas</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card text-white text-center bg-success mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h2 class="card-title display-1">{{ total_canceled }}</h2>
+        </div>
+        <div class="card-header">Consultas canceladas</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card text-white text-center bg-primary mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h2 class="card-title display-1">{{ total_doctors }}</h2>
+        </div>
+        <div class="card-header">Médicos</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="card text-white text-center bg-primary mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h2 class="card-title display-1">{{ total_patients }}</h2>
+        </div>
+        <div class="card-header">Pacientes</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card text-white text-center bg-primary mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h2 class="card-title display-1">{{ total_attendants }}</h2>
+        </div>
+        <div class="card-header">Atendentes</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card text-white text-center bg-danger mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h2 class="card-title display-1">{{ total_exams }}</h2>
+        </div>
+        <div class="card-header">Exames solicitados</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card text-white text-center bg-danger mb-3" style="max-width: 18rem;">
+        <div class="card-body">
+          <h2 class="card-title display-1">{{ total_medicines }}</h2>
+        </div>
+        <div class="card-header">Medicamentos prescritos</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <ul class="list-group col pl-3 mb-3">
+      <li class="list-group-item text-white bg-success">Especialidades médicas mais atendidas:</li>
+      {% for speciality in topten_specialitys %}
+      <li class="list-group-item">{{ speciality.doctor__speciality }} <span class="badge badge-pill badge-success">&nbsp;{{ speciality.count }}&nbsp;</span></li>
+      {% endfor %}
+    </ul>
+    <ul class="list-group col pl-3 mb-3">
+      <li class="list-group-item text-white bg-success">Médicos com mais consultas atendidas:</li>
+      {% for doctor in topten_doctors %}
+      <li class="list-group-item">{{ doctor.doctor__name }} ({{ doctor.doctor__speciality }}) <span class="badge badge-pill badge-success">&nbsp;{{ doctor.count }}&nbsp;</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="row">
+    <ul class="list-group col pl-3 mb-3">
+      <li class="list-group-item text-white bg-primary">Pacientes com mais consultas marcadas:</li>
+      {% for patient in topten_patients %}
+        <li class="list-group-item">{{ patient.patient__name }} <span class="badge badge-pill badge-primary">&nbsp;{{ patient.count }}&nbsp;</span></li>
+      {% endfor %}
+    </ul>
+    <ul class="list-group col pl-3 mb-3">
+      <li class="list-group-item text-white bg-primary">Pacientes com mais consultas canceladas:</li>
+      {% for patient in topten_patients_cancel %}
+        <li class="list-group-item">{{ patient.patient__name }} <span class="badge badge-pill badge-primary">&nbsp;{{ patient.count }}&nbsp;</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="row">
+    <ul class="list-group col pl-3 mb-3">
+      <li class="list-group-item text-white bg-danger">Exames mais solicitados:</li>
+      {% for exam in topten_exams %}
+        <li class="list-group-item">{{ exam.exam__name }} <span class="badge badge-pill badge-danger">&nbsp;{{ exam.count }}&nbsp;</span></li>
+      {% endfor %}
+    </ul>
+    <ul class="list-group col pl-3 mb-3">
+      <li class="list-group-item text-white bg-danger">Medicamentos mais prescritos:</li>
+      {% for medicine in topten_medicines %}
+        <li class="list-group-item">
+           {{ medicine.medicine__factory_name }} ({{ medicine.medicine__generic_name }}) <span class="badge badge-pill badge-danger">&nbsp;{{ medicine.count }} &nbsp;</span>
+         </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

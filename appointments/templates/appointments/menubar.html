@@ -2,6 +2,7 @@
 <div class="container my-3">
   {% if user.is_superuser %}
     <a class="menuBtn btn btn-light" href="{% url 'all_attendant' %}">Atendentes</a>
+    <a class="menuBtn btn btn-light" href="{% url 'statistics' %}">Estatísticas de Atendimentos</a>
   {% endif %}
   {% if user.attendant %}
     <a class="menuBtn btn btn-outline-info" href="{% url 'all_doctor' %}">Médicos</a>

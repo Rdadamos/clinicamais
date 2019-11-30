@@ -1,8 +1,9 @@
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
-from .models import Appointment, Doctor, DoctorSchedule, AppointmentExam, AppointmentMedicine
+from django.db.models import Count
+from .models import Appointment, Doctor, Attendant, Patient, DoctorSchedule, AppointmentExam, AppointmentMedicine
 from .forms import AppointmentForm, AppointmentInProgressForm, AppointmentExamForm, AppointmentMedicineForm, DoctorScheduleForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 import datetime as datetime
 from datetime import timedelta, date
 from django.utils.translation import gettext
@@ -176,6 +177,40 @@ def details_appointment(request, id):
     medicines = AppointmentMedicine.objects.filter(appointment=appointment.id)
     patient_appointments = Appointment.objects.filter(date__lte=datetime.date.today(), canceled=False, patient=appointment.patient).order_by('-date')
     return render(request, 'appointments/details_appointment.html', { 'appointment': appointment, 'exams': exams, 'medicines': medicines, 'patient_appointments': patient_appointments })
+
+@user_passes_test(lambda u: u.is_superuser, login_url='/home/')
+def statistics(request):
+    total_appointments = Appointment.objects.filter().count()
+    total_attended = Appointment.objects.filter(attended=True).count()
+    total_canceled = Appointment.objects.filter(canceled=True).count()
+    total_doctors = Doctor.objects.filter().count()
+    total_patients = Patient.objects.filter().count()
+    total_attendants = Attendant.objects.filter().count()
+    total_exams = AppointmentExam.objects.filter().count()
+    total_medicines = AppointmentMedicine.objects.filter().count()
+    topten_exams = AppointmentExam.objects.values('exam', 'exam__name').annotate(count=Count('exam')).order_by('-count')[:10]
+    topten_medicines = AppointmentMedicine.objects.values('medicine', 'medicine__generic_name', 'medicine__factory_name').annotate(count=Count('medicine')).order_by('-count')[:10]
+    topten_patients = Appointment.objects.values('patient', 'patient__name').annotate(count=Count('patient')).order_by('-count')[:10]
+    topten_patients_cancel = Appointment.objects.filter(canceled=True).values('patient', 'patient__name').annotate(count=Count('patient')).order_by('-count')[:10]
+    topten_doctors = Appointment.objects.values('doctor', 'doctor__name', 'doctor__speciality').annotate(count=Count('doctor')).order_by('-count')[:10]
+    topten_specialitys = Appointment.objects.values('doctor__speciality').annotate(count=Count('doctor__speciality')).order_by('-count')[:10]
+    context = {
+        'total_appointments': total_appointments,
+        'total_attended': total_attended,
+        'total_canceled': total_canceled,
+        'total_doctors': total_doctors,
+        'total_patients': total_patients,
+        'total_attendants': total_attendants,
+        'total_exams': total_exams,
+        'total_medicines': total_medicines,
+        'topten_exams': topten_exams,
+        'topten_medicines': topten_medicines,
+        'topten_patients': topten_patients,
+        'topten_patients_cancel': topten_patients_cancel,
+        'topten_doctors': topten_doctors,
+        'topten_specialitys': topten_specialitys,
+    }
+    return render(request, 'appointments/statistics.html', context)
 
 @login_required(login_url='/')
 def cancel_appointment(request, id):
