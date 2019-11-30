@@ -17,7 +17,7 @@
           <div class="mainMsg text-right p-3">
             <div class="container">
               <h1 class="float-left text-left homeTitle">
-                <a class="homeLink" href="{% url 'home' %}" title="Home">Clínica Mais</a>
+                <a class="homeLink" href="{% url 'home' %}" title="Home"><strong class="text-success position-relative" style="font-size: 4rem; top: 0.5rem">+</strong> Clínica Mais</a>
               </h1>
               <span>Olá, {{ user.first_name }}{{ user.attendant.name }}{{ user.doctor.name }}{{ user.patient.name }}</span>
               <a class="btn btn-dark ml-4" href="{% url 'logout' %}">Sair</a>
